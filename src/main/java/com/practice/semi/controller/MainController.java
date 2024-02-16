@@ -2,21 +2,18 @@ package com.practice.semi.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.mysql.cj.log.Log;
-
-import lombok.extern.log4j.Log4j;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
-@Log4j
+@Slf4j
 public class MainController {
-	
-	@GetMapping({"/","/main"})
+
+	@GetMapping({ "/", "/main" })
 	public String home() {
-		System.out.println("main page init !! ");
-//		Log.()
+		log.info("main page init !! ");
+
 		return "index";
 	}
-	
+
 }
