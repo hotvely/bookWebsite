@@ -22,18 +22,15 @@
 				method: "GET",
 				success: function(data){
 					console.log(data);
-					books = [...data]
+					books = [...data];
 					
 					books.map((book) => {
-						$("#bookList").append('<tr><td>'+book.bookTitle+'<td><td>'+book.bookDetail+'<td><td>'+
-								book.price+'<td><tr>');
+						$("#bookList").append('<tr><td width="100px">'+book.bookTitle+'</td>'+
+								'<td width="100px">'+ book.bookDetail+'</td>'+
+								'<td width="100px">'+ book.price+'</td><tr>');
 					});
 				}
-				
-				
 			});
-			
-			
 		}
 		console.log(books);
 		
