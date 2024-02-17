@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import com.practice.semi.vo.User;
 
 @Controller
-@RequestMapping("http://localhost:8080/member")
-public class UserController {
+@RequestMapping("/member")
+public class MemberController {
 	
 	
 

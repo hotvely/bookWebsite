@@ -19,7 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RequestMapping("/book")
 public class BookController {
-
+	Book a = new Book();
 	Book[] list = { new Book(1, "안녕", "안녕", 999), new Book(2, "ㅋㅋㅋ", "ㅋㅋㅋ", 1000), new Book(3, "호호호호", "호호호호", 3333) };
 	
 	@GetMapping("/showAll")
