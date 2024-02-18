@@ -1,9 +1,14 @@
 package com.practice.semi.vo;
 
+
+
+import java.util.Date;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -11,18 +16,37 @@ import lombok.NoArgsConstructor;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
+@Builder
 public class Book {
 	
 	@Id
-	int bookCode;
+	@Column
+	private int code;
 	
 	@Column
-	String bookTitle;
+	private String title;	
 	
 	@Column
-	String bookDetail;
+	private String detail;
 	
 	@Column
-	int price;
+	private String authority;
+	
+	@Column
+	private int subcategory;
+	
+	@Column
+	private int price;
+	
+	@Column
+	private String publisher;
+	
+	@Column
+	private Date date;
+	
+	@Column
+	private String image;
+
+	
 	
 }

@@ -25,28 +25,49 @@ public class MemberController {
 	@Autowired
 	private MemberService service;
 	
-	@GetMapping("/member")
+	
+
+	@GetMapping("/register")
+	public String registerPage(){
+		return "member/register";
+	}
+	
+	@GetMapping("/login")
+	public String loginPage(){
+		return "member/login";
+	}
+	
+	@GetMapping("/logout")
+	public String logOut(){
+		
+		//Todo..
+		
+		return "index";
+	}
+	
+	
+	@GetMapping("/showall")
 	public ResponseEntity<List<Member>> showAll(){
 		return null;	
 	}
 	
-	@GetMapping("/member/{code}")
+	@GetMapping("/show/{code}")
 	public ResponseEntity<Member> show(int code){
 		return null;
 	}
 	
 
-	@PostMapping("/member")
+	@PostMapping("/register")
 	public ResponseEntity<Member> register(){
 		return null;
 	}
 	
-	@PutMapping("/member")
+	@PutMapping("/update")
 	public ResponseEntity<Member> updateMember(){
 		return null;
 	}
 	
-	@DeleteMapping("/member/{code}")
+	@DeleteMapping("/delete/{code}")
 	public ResponseEntity<Member> deleteMember(){
 		return null;
 	}
