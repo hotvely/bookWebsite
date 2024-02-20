@@ -16,7 +16,7 @@ public interface MemberDAO extends JpaRepository<Member, Integer> {
 	String findByMemberId(String id, String email); 
 	
 	// 비밀번호 찾기
-	@Query(value = "SELECT PASSWORD FROM MEMBER WHERE PASSWORD = :passWord EMAIL = :email ", nativeQuery = true)
+	@Query(value = "SELECT PASSWORD FROM MEMBER WHERE PASSWORD = :passWord AND EMAIL = :email ", nativeQuery = true)
 	String findByPwd(String id, String email); 
 	
 	

@@ -1,5 +1,7 @@
 package com.practice.semi.vo;
 
+import org.hibernate.annotations.ColumnDefault;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -38,5 +40,8 @@ public class Member {
 	
 	@Column(name = "NICKNAME")
 	String nickName;
+	
+	@Column(name = "ROLE")
+	String role;
 	
 }

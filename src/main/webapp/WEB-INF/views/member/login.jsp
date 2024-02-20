@@ -9,5 +9,39 @@
 </head>
 <body>
 	<h1>로그인</h1>
+	
+	<div class="form-el">
+	아이디 : <input type="text" name="username" id="username" placeholder="아이디를 입력해 주세요" required/> 
+	</div>
+	
+	<div class="form-el">
+	비밀번호 : <input type="text" name = "password" id = "password" placeholder="비밀번호를 입력해 주세요" required/>
+	</div> 
+	
+	<br/>
+	
+	<button type="submit" value="로그인" id=login>
+		로그인
+	</button>
+	
+	<script>
+	 	$(#'login').on('click',function(){
+	 		let member = {
+	 				username:$('#username').val(),
+	 				password:$('#password').val()
+	 		};
+	 		$.ajax({
+	 			url:'/member/login',
+	 			type:'POST'
+	 			data: JSON.stringify(member),
+	 			success: function(){
+					'뭐넣어야되지'
+				},
+			error: function(error){
+				console.log('로그인 에러')
+			}
+	 		});
+	 	})
+	</script>
 </body>
 </html>

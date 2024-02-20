@@ -30,10 +30,33 @@
 	닉네임 : <input type="text" name="nickname" id="nickname" placeholder="닉네임을 입력해 주세요" required/>
 	</div>
 	
-	<input type="button" value="회원가입" id=register/>
+	<br/>
+	
+	<button type="submit" value="회원가입" id=register>
+		가입
+	</button>
 	
 	<script>
-	
+		$('register').on('click',function(){
+			let member = {
+					username:$('#username').val(),
+					password:$('#password').val(),
+					email:$('#email').val(),
+					phone:$('#phone').val(),
+					nickname:$('#nickname').val()
+			};
+			$.ajax({
+				url:'/member/registerPage',
+				type: 'POST',
+				data: JSON.stringify(member),
+				success: function(){
+					'뭐넣어야되지'
+				},
+			error: function(error){
+				console.log('회원가입 에러')
+			}
+			});
+		})
 	</script>
 </body>
 </html>
