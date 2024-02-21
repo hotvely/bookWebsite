@@ -22,13 +22,20 @@ public class MemberService {
 	}
 	
 	// 비밀번호 찾기
-	public String findPwd(MemberDTO dto) {
-		return dao.findByPwd(dto.getId(), dto.getMail());
+//	public String findPwd(MemberDTO dto) {
+//		return dao.findByPwd(dto.getId(), dto.getMail());
+//	}
+//	
+	public String findPwd(String id, String email) {
+		return dao.findByPwd(id, email);
 	}
 	
 	// 로그인 만들어야됨
 	public Member loginMember(String id, String password) {
-		
+		Member member = dao.findByStringId(id);
+		if(member != null && password.equals(member.getPassword())) {
+			return member;
+		}		
 		return null;
 	}
 	
@@ -45,8 +52,8 @@ public class MemberService {
 		 return null;
 	    } 
 	
-	public Member findByNickname(String nickName) {
-		Member member = dao.findByNickName(nickName);
+	public Member findByNickname(String nickname) {
+		Member member = dao.findByNickName(nickname);
 	    if(member != null) {
 	    	return member;
 		 }

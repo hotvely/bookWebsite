@@ -1,7 +1,5 @@
 package com.practice.semi.vo;
 
-import org.hibernate.annotations.ColumnDefault;
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -30,7 +28,7 @@ public class Member {
 	String id;
 	
 	@Column(name = "PASSWORD")
-	String passWord;
+	String password;
 	
 	@Column(name = "EMAIL")
 	String email;
@@ -39,9 +37,9 @@ public class Member {
 	String phone;
 	
 	@Column(name = "NICKNAME")
-	String nickName;
+	String nickname;
 	
-	@Column(name = "ROLE")
-	String role;
+	@Column(name = "ADMIN")
+	String admin;
 	
 }

@@ -49,33 +49,39 @@ public class MemberController {
 	public ModelAndView registerView() {
 		log.info("dma....");
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("member/registerPage");
+		mv.setViewName("member/registerView");
 		return mv;
 	}
 	
-	@GetMapping("loginView")
+	@GetMapping("/loginView")
 	public ModelAndView loginView() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("member/login");
 		return mv;
 	}
 	
-
+	@GetMapping("/myPageView")
+	public ModelAndView myPageView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/member/myPageView");
+		return mv;
+	}
 	
 	//--------------------- page view 
 	
+	
+	
 	//--------------------- function & mapping
 
-	// 멤버 코드로 찾기
-	@PostMapping("/findById")
-	public String show(@PathVariable int code, Model model) {
+	// 상세 조회
+	@GetMapping("/show/{code}")
+	 ResponseEntity<Member> show(@RequestParam("code") int code){
 		Member member = service.show(code);
-		if (member != null) {
-			model.addAttribute("member", member);
-			return "회원조회 페이지";
-		} else {
-			return "조회실패 페이지";
+		if(member != null) {
+			return ResponseEntity.ok(member);
 		}
+		return null;
+		
 	}
 
 	// 닉네임으로 멤버 찾기
@@ -102,55 +108,68 @@ public class MemberController {
 //		}
 //	}
 
-	// 비밀번호 찾기 이메일 인증하는거 넣어야함
-	@PostMapping("/findPwd")
-	public ResponseEntity<String> findPwd(@RequestBody MemberDTO dto) {
-		String pwd = service.findPwd(dto);
-		return ResponseEntity.ok(pwd);
-	}
-
-
 	// 회원가입
 	@PostMapping("/register")
 	public ResponseEntity<Member> register(@RequestParam("username")String id,
-			@RequestParam(name="password", required=false) String password ,
+			@RequestParam("password") String password ,
 			@RequestParam("email") String email ,
 			@RequestParam("phone") String phone ,
 			@RequestParam("nickname") String nickname) {
-		log.info("register");
-//		ModelAndView mv = new ModelAndView();
+		log.info("register");		
+		Member member = Member.builder()
+				.id(id)
+				.password(password)
+				.email(email).phone(phone)
+				.nickname(nickname)
+				.build();
+		log.info("가입" + member.toString());
 		
-		Member member = Member.builder().id(id).passWord(password).email(email).phone(phone).nickName(nickname).build();
-		log.info("" + member.toString());
-		
-//
-//		Member member = Member.builder().id(dto.getId()).passWord(dto.getPwd()).email(dto.getMail())
-//				.phone(dto.getPhone()).nickName(dto.getNickName()).build();
-
-//		Member regiMember = service.create(member);
-//
-//		if (regiMember != null) {
-//			MemberDTO responseDTO = MemberDTO.builder().id(regiMember.getId()).nickName(regiMember.getNickName())
-//					.build();
-//			mv.setViewName("index");
-//			mv.addObject("registertest", member);
 			return ResponseEntity.ok(member);
-//		} else {
-//			mv.setViewName("register");
-//			return mv;
-//		}
+	}
+	
+//	@PostMapping("/findPwd")
+//	public ResponseEntity<String> findPwd(@RequestBody MemberDTO dto) {
+//		String pwd = service.findPwd(dto);
+//		return ResponseEntity.ok(pwd);
+//	}
+//	
+	// 비밀번호 찾기
+	@PostMapping("/findPwd")
+	public ResponseEntity<String> findPwd(@RequestParam("username") String id,
+			@RequestParam("email") String email) {
+		String pwd = service.findPwd(id, email);
+		return ResponseEntity.ok(pwd);
 	}
 
-	// 로그인 만들어야함
+	// 로그인 
 	@PostMapping("/login")
-	public ResponseEntity<MemberDTO> loginMember(@RequestBody MemberDTO dto, Model model) {
+	public ResponseEntity<Member> login(@RequestParam("username")String id,
+			@RequestParam("password")String password ) {
+		try {
+			Member member = service.loginMember(id, password);			
+			return ResponseEntity.ok(member);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}	
 		return null;
 	}
 
 	// 회원수정
 	@PutMapping("/update")
-	public ResponseEntity<MemberDTO> updateMember(@RequestBody MemberDTO dto, Model model) {
-		return null;
+	public ResponseEntity<Member> update(@RequestParam("username")String id,
+			@RequestParam("password")String password,
+			@RequestParam("email")String email,
+			@RequestParam("phone")String phone,
+			@RequestParam("nickname")String nickname) {
+		Member member = Member.builder()
+						.id(id)
+						.password(password)
+						.email(email)
+						.phone(phone)
+						.nickname(nickname)
+						.build();
+		log.info("수정" + member.toString());
+		return ResponseEntity.ok(member);
 	}
 
 	// 회원탈퇴

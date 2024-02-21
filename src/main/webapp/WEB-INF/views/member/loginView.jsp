@@ -33,9 +33,12 @@
 	 		$.ajax({
 	 			url:'/member/login',
 	 			type:'POST'
-	 			data: JSON.stringify(member),
-	 			success: function(){
-					'뭐넣어야되지'
+	 			data: member,	 			
+	 				success: function(response){	
+						console.log(response);
+						if(response != null){
+							window.location.href = "/";
+						}
 				},
 			error: function(error){
 				console.log('로그인 에러')
