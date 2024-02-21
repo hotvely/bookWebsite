@@ -29,7 +29,7 @@
 				<optgroup label="==== 문학">
 					<option value="1">소설</option>
 					<option value="2">수필</option>
-					<option value= "51">만화</option>
+					<option value="51">만화</option>
 				</optgroup>
 				<optgroup label="==== 학습">
 					<option value="4">이공계열 전문서적</option>
@@ -42,7 +42,7 @@
 
 		<div>
 			<span>가격</span>
-			<input type="text" id="price" name="price" onkeypress="return insNumKey(event)"/>
+			<input type="text" id="price" name="price" onkeypress="return insNumKey(event)" />
 		</div>
 
 		<div>
@@ -59,8 +59,12 @@
 			<span>대표이미지</span>
 			<input type="file" accept="image/*" id="img" name="img" />
 		</div>
-
-		<button onclick="addBookForm()">추가</button>
+		<div>
+			<button onclick="addBookForm()">추가</button>
+			<a href="/">
+				<button>뒤로가기</button>
+			</a>
+		</div>
 	</div>
 
 	<script>

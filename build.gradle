@@ -28,6 +28,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-tomcat'
 	
+	implementation 'jakarta.servlet:jakarta.servlet-api:4.0.6' // 현재 최신 버전일 수 있으므로 확인 후 업데이트
 	implementation 'javax.servlet:jstl:1.2'
 	implementation "org.apache.tomcat.embed:tomcat-embed-jasper"
 	
@@ -40,7 +41,6 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter-test:3.0.3'
 	
-	implementation 'org.springframework.boot:spring-boot-starter-security'
 }
 
 
