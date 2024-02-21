@@ -41,7 +41,7 @@ public class BookController {
 	public ResponseEntity<Book> create(@RequestParam(name = "title", required = false) String title,
 			@RequestParam(name = "detail", required = false) String detail,
 			@RequestParam(name = "authority", required = false) String authority,
-			@RequestParam(name = "subCategory", required = false) Integer subCategory,
+			@RequestParam(name = "subcategory", required = false) Integer subCategory,
 			@RequestParam(name = "price", required = false) Integer price,
 			@RequestParam(name = "publisher", required = false) String publisher,
 			@RequestParam(name = "date", required = false) Date date,
