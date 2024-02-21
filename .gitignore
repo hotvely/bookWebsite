@@ -27,7 +27,7 @@ out/
 !**/src/test/**/out/
 
 ### NetBeans ###
-/nbproject/private/
+/nbproject/private/s
 /nbbuild/
 /dist/
 /nbdist/
@@ -35,3 +35,7 @@ out/
 
 ### VS Code ###
 .vscode/
+
+#### .properties files ####
+src/main/**/application.properties
+src/main/resources/application.properties

@@ -1,5 +1,9 @@
 package com.practice.semi.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -38,23 +42,32 @@ public class BookController {
 	}
 
 	@PostMapping("/create")
-	public ResponseEntity<Book> create(@RequestParam(name = "title", required = false) String title,
+	public ResponseEntity<Book> create(@RequestParam(name = "title") String title,
 			@RequestParam(name = "detail", required = false) String detail,
-			@RequestParam(name = "authority", required = false) String authority,
-			@RequestParam(name = "subcategory", required = false) Integer subCategory,
-			@RequestParam(name = "price", required = false) Integer price,
-			@RequestParam(name = "publisher", required = false) String publisher,
-			@RequestParam(name = "date", required = false) Date date,
+			@RequestParam(name = "authority") String authority,
+			@RequestParam(name = "subcategory", required = false) Integer subcategory,
+			@RequestParam(name = "price") int price,
+			@RequestParam(name = "publisher") String publisher,
+			@RequestParam(name = "date", required = false) String date,
 			@RequestParam(name = "image", required = false) String image) {
 
-		if (price == null)
-			price = 0;
+		
 
-		if (subCategory == null)
-			subCategory = 0;
-
-		Book book = Book.builder().title(title).detail(detail).authority(authority).subcategory(subCategory)
-				.price(price).publisher(publisher).date(date).image(image).build();
+		if (subcategory == null)
+			subcategory = 0;
+		
+		// 날짜 문자열로 받아서 java.util.Date 타입으로 변환해 줘야함.
+		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-mm-dd");
+		Date bDate = null;
+		try {
+			bDate = formatter.parse(date);
+		} catch (ParseException e) {
+			// TODO 자동 생성된 catch 블록
+			e.printStackTrace();
+		}
+		
+		Book book = Book.builder().title(title).detail(detail).authority(authority).subcategory(subcategory)
+				.price(price).publisher(publisher).date(bDate).image(image).build();
 
 		log.info(book.toString());
 
