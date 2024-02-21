@@ -2,9 +2,7 @@ package com.practice.semi.controller;
 
 import java.util.List;
 
-import org.aspectj.apache.bcel.classfile.Module.Require;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -13,15 +11,15 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-
 import com.practice.semi.service.MemberService;
 import com.practice.semi.vo.Member;
 import com.practice.semi.vo.MemberDTO;
 
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
 @Controller
@@ -31,8 +29,8 @@ public class MemberController {
 
 	@Autowired
 	private MemberService service;
-	
-	//--------------------- page view 
+	HttpSession session = null;
+	// --------------------- page view
 
 	@GetMapping("/")
 	public ModelAndView showAll(Model model) {
@@ -41,48 +39,65 @@ public class MemberController {
 
 		ModelAndView mv = new ModelAndView();
 		mv.addObject("mlist", members);
-		mv.setViewName("adminPage");
+		mv.setViewName("/member/adminView");
 		return mv;
 	}
-	
-	@GetMapping("/registerView")
-	public ModelAndView registerView() {
-		log.info("dma....");
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("member/registerView");
-		return mv;
-	}
-	
-	@GetMapping("/loginView")
-	public ModelAndView loginView() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("member/login");
-		return mv;
-	}
-	
-	@GetMapping("/myPageView")
-	public ModelAndView myPageView() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/member/myPageView");
-		return mv;
-	}
-	
-	//--------------------- page view 
-	
-	
-	
-	//--------------------- function & mapping
 
 	// 상세 조회
 	@GetMapping("/show/{code}")
-	 ResponseEntity<Member> show(@RequestParam("code") int code){
+	public ModelAndView show(Model model, @RequestParam("code") int code) {
+
 		Member member = service.show(code);
-		if(member != null) {
-			return ResponseEntity.ok(member);
+
+		if (member != null) {
+			model.addAttribute("member", member);
+
+			ModelAndView mv = new ModelAndView();
+			mv.addObject("showMember", member);
+			mv.setViewName("/member/adminView");
+			return mv;
 		}
 		return null;
-		
+
 	}
+
+	@GetMapping("/register")
+	public ModelAndView registerView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/member/registerView");
+		return mv;
+	}
+
+	@GetMapping("/login")
+	public ModelAndView loginView() {
+		log.info("dma....");
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/member/loginView");
+		return mv;
+	}
+
+	@GetMapping("/myPage")
+	public ModelAndView myPageView(HttpServletRequest request) {
+		ModelAndView mv = new ModelAndView();
+
+		if (session.getAttribute("member") == null) {
+			mv.setViewName("/member/loginView");
+			return mv;
+		}
+
+		Member loginMember = (Member) session.getAttribute("loginMember");
+		if (loginMember != null) {
+			mv.addObject("loginMember", loginMember);
+			mv.setViewName("/member/myPageView");
+			return mv;
+		} 
+			return null;
+		}
+	
+
+	// --------------------- page view
+
+	// --------------------- function & mapping
 
 	// 닉네임으로 멤버 찾기
 //	@PostMapping("/")
@@ -110,23 +125,16 @@ public class MemberController {
 
 	// 회원가입
 	@PostMapping("/register")
-	public ResponseEntity<Member> register(@RequestParam("username")String id,
-			@RequestParam("password") String password ,
-			@RequestParam("email") String email ,
-			@RequestParam("phone") String phone ,
-			@RequestParam("nickname") String nickname) {
-		log.info("register");		
-		Member member = Member.builder()
-				.id(id)
-				.password(password)
-				.email(email).phone(phone)
-				.nickname(nickname)
-				.build();
-		log.info("가입" + member.toString());
-		
-			return ResponseEntity.ok(member);
+	public ResponseEntity<Member> register(@RequestParam("username") String id,
+			@RequestParam("password") String password, @RequestParam("email") String email,
+			@RequestParam("phone") String phone, @RequestParam("nickname") String nickname) {
+		log.info("register");
+		Member member = Member.builder().id(id).password(password).email(email).phone(phone).nickname(nickname).build();
+		Member registerMember = service.create(member);
+		log.info("가입 " + member.toString());
+		return ResponseEntity.ok(registerMember);
 	}
-	
+
 //	@PostMapping("/findPwd")
 //	public ResponseEntity<String> findPwd(@RequestBody MemberDTO dto) {
 //		String pwd = service.findPwd(dto);
@@ -135,41 +143,71 @@ public class MemberController {
 //	
 	// 비밀번호 찾기
 	@PostMapping("/findPwd")
-	public ResponseEntity<String> findPwd(@RequestParam("username") String id,
-			@RequestParam("email") String email) {
+	public ResponseEntity<String> findPwd(@RequestParam("username") String id, @RequestParam("email") String email) {
 		String pwd = service.findPwd(id, email);
 		return ResponseEntity.ok(pwd);
 	}
 
-	// 로그인 
+	// 로그인
 	@PostMapping("/login")
-	public ResponseEntity<Member> login(@RequestParam("username")String id,
-			@RequestParam("password")String password ) {
+	public ResponseEntity<Boolean> login(@RequestParam("username") String id,
+			@RequestParam("password") String password, HttpServletRequest request)  {
+		log.info("로그인 성공하냐");
+		Member member = service.loginMember(id, password);
 		try {
-			Member member = service.loginMember(id, password);			
-			return ResponseEntity.ok(member);
+		
+			if(member != null) {
+				session = request.getSession();
+				session.setAttribute("member", member);
+				return ResponseEntity.ok(true);
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}	
-		return null;
+		}
+		return ResponseEntity.ok(false);
+	}
+	
+	@PostMapping("/isLogin")
+	public ResponseEntity<MemberDTO> isLogin()
+	{
+		Member member = (Member)session.getAttribute("member");
+		
+		if(member != null) {
+			MemberDTO dto  = MemberDTO.builder().id(member.getId()).nickName(member.getNickname()).build();		
+			return ResponseEntity.ok(dto);
+		}
+		
+		
+		return ResponseEntity.ok(null);
+	}
+
+	// 로그아웃
+	@PostMapping("/logout")
+	public void logout(HttpServletRequest request) {
+
+		HttpSession session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+		}
 	}
 
 	// 회원수정
 	@PutMapping("/update")
-	public ResponseEntity<Member> update(@RequestParam("username")String id,
-			@RequestParam("password")String password,
-			@RequestParam("email")String email,
-			@RequestParam("phone")String phone,
-			@RequestParam("nickname")String nickname) {
+	public ResponseEntity<Member> update(@RequestParam("username") String id,
+			@RequestParam("password") String password,
+			@RequestParam("email") String email,
+			@RequestParam("phone") String phone,
+			@RequestParam("nickname") String nickname) {
 		Member member = Member.builder()
-						.id(id)
-						.password(password)
-						.email(email)
-						.phone(phone)
-						.nickname(nickname)
-						.build();
+				.id(id)
+				.password(password)
+				.email(email)
+				.phone(phone)
+				.nickname(nickname)
+				.build();
+		Member updateMember = service.create(member);
 		log.info("수정" + member.toString());
-		return ResponseEntity.ok(member);
+		return ResponseEntity.ok(updateMember);
 	}
 
 	// 회원탈퇴
@@ -177,12 +215,10 @@ public class MemberController {
 	public ResponseEntity<Boolean> deleteMember(@PathVariable int code) {
 		try {
 			service.delete(code);
-		} 
-		catch (Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			return ResponseEntity.ok(false);
 		}
-		
 		return ResponseEntity.ok(true);
 	}
 

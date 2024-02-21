@@ -8,7 +8,7 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
-	<h1>my page</h1>
+	<h1>내 정보</h1>
 	
 	<div class="form-el">
 	아이디 : <input type="text" name="username" id="username" placeholder="아이디를 입력해 주세요" required/> 
@@ -40,7 +40,7 @@
 		let member = {
 				username:$('#username').val(),
 				password:$('#password').val(),
-				eamil:$('#email').val(),
+				email:$('#email').val(),
 				phone:$('#phone').val(),
 				nickname:$('#nickname').val()
 		};
@@ -49,6 +49,7 @@
 			type: 'PUT',
 			data: member,
 			success: function(response){
+				
 				console.log(response);
 				if(response != null){
 					window.location.href ="/"
