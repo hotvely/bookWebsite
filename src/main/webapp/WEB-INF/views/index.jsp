@@ -37,11 +37,12 @@
 	
 	</script>
 
-
+	${test}
 	hello
 	<button onclick="addBook()">addBook</button>
 	<button onclick="showAll()">showAll</button>
 	<button><a href="/book/create">add</a></button>
+	<button><a href="/member/registerView" style="text-decoration:none; color:black">member register</a></button>
 	
 	<div id="bookList"></div>
 </body>

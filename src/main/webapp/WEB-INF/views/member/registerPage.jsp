@@ -37,7 +37,7 @@
 	</button>
 	
 	<script>
-		$('register').on('click',function(){
+		$('#register').on('click',function(){
 			let member = {
 					username:$('#username').val(),
 					password:$('#password').val(),
@@ -46,11 +46,16 @@
 					nickname:$('#nickname').val()
 			};
 			$.ajax({
-				url:'/member/registerPage',
+				url:'/member/register',
 				type: 'POST',
-				data: JSON.stringify(member),
-				success: function(){
-					'뭐넣어야되지'
+				data: member,
+				success: function(response){
+					
+					console.log(response);
+					if(response != null){
+						window.location.href = "/";
+					}
+					
 				},
 			error: function(error){
 				console.log('회원가입 에러')

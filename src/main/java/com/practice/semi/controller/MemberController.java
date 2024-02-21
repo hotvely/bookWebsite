@@ -1,6 +1,8 @@
 package com.practice.semi.controller;
 
 import java.util.List;
+
+import org.aspectj.apache.bcel.classfile.Module.Require;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -13,6 +15,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.practice.semi.service.MemberService;
@@ -44,8 +47,9 @@ public class MemberController {
 	
 	@GetMapping("/registerView")
 	public ModelAndView registerView() {
+		log.info("dma....");
 		ModelAndView mv = new ModelAndView();
-		mv.setViewName("register");
+		mv.setViewName("member/registerPage");
 		return mv;
 	}
 	
@@ -108,24 +112,33 @@ public class MemberController {
 
 	// 회원가입
 	@PostMapping("/register")
-	public ModelAndView register(@RequestBody MemberDTO dto) {
+	public ResponseEntity<Member> register(@RequestParam("username")String id,
+			@RequestParam(name="password", required=false) String password ,
+			@RequestParam("email") String email ,
+			@RequestParam("phone") String phone ,
+			@RequestParam("nickname") String nickname) {
+		log.info("register");
+//		ModelAndView mv = new ModelAndView();
 		
-		ModelAndView mv = new ModelAndView();
+		Member member = Member.builder().id(id).passWord(password).email(email).phone(phone).nickName(nickname).build();
+		log.info("" + member.toString());
+		
+//
+//		Member member = Member.builder().id(dto.getId()).passWord(dto.getPwd()).email(dto.getMail())
+//				.phone(dto.getPhone()).nickName(dto.getNickName()).build();
 
-		Member member = Member.builder().id(dto.getId()).passWord(dto.getPwd()).email(dto.getMail())
-				.phone(dto.getPhone()).nickName(dto.getNickName()).build();
-
-		Member regiMember = service.create(member);
-
-		if (regiMember != null) {
-			MemberDTO responseDTO = MemberDTO.builder().id(regiMember.getId()).nickName(regiMember.getNickName())
-					.build();
-			mv.setViewName("index");
-			return mv;
-		} else {
-			mv.setViewName("register");
-			return mv;
-		}
+//		Member regiMember = service.create(member);
+//
+//		if (regiMember != null) {
+//			MemberDTO responseDTO = MemberDTO.builder().id(regiMember.getId()).nickName(regiMember.getNickName())
+//					.build();
+//			mv.setViewName("index");
+//			mv.addObject("registertest", member);
+			return ResponseEntity.ok(member);
+//		} else {
+//			mv.setViewName("register");
+//			return mv;
+//		}
 	}
 
 	// 로그인 만들어야함
