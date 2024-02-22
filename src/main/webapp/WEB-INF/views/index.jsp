@@ -6,10 +6,19 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
 </head>
 <body>
+	<jsp:include page="/header" />
+
+	이 줄 부터는 메인 페이지 입니다..
+
+
+
+
+
 	<script>	
-		
+		console.log(member);
 		let books = null;
 		
 		const moveDetail = () => {
@@ -45,15 +54,44 @@
 			});
 		}
 		showAll();
+
+	// <img src="http://www.adullammission.org/files/attach/images/941/494/001/d682e4726411430055c0b856df54297b.jpg" />
+	//  <button onclick="showAll()">showAll</button> 
+
+
+		
+		
+		const handlerAfterMember = (id) => {
+			if( id != undefined || id != null){
+				$('#afterMember').append(id + "님 반갑습니다.");
+			}
+		}
+		
+				
+		// 로그인시 멤버 정보 가져오는 로직
+		
+		/*
+		$("#logout").click(function() {
+		        $.ajax({
+		            type: "POST",
+		            url: "/member/logout",
+		            success: function() {
+		                console.log("로그아웃 성공");
+		                location.reload(); 
+		            },
+		            error: function() {
+		                console.log("로그아웃 실패");
+		            }
+		        });
+		    });
+		});
+		*/
 	</script>
 
-	<div>
-		<a href="member/loginView">로그인</a>
-		<a href="member/registerView">회원가입</a>
-
-	</div>
-	<img src="http://www.adullammission.org/files/attach/images/941/494/001/d682e4726411430055c0b856df54297b.jpg" />
+	<div id="afterMember"></div>
+	<button onclick="addBook()">addBook</button>
 	<!-- <button onclick="showAll()">showAll</button> -->
+
 
 	<a href="/book/create">
 		<button>책추가</button>
@@ -78,5 +116,6 @@
 		</tr>
 	</table>
 
+	<div id="bookList"></div>
 </body>
 </html>

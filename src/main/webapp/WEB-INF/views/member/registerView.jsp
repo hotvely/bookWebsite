@@ -53,9 +53,10 @@
 					
 					console.log(response);
 					if(response != null){
+						alert("회원가입 성공");
 						window.location.href = "/";
-					}
-					
+						console.log(member)
+					}					
 				},
 			error: function(error){
 				console.log('회원가입 에러')
