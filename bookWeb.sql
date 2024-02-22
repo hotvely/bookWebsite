@@ -49,5 +49,5 @@ CREATE TABLE `MEMBER` (
   `NICKNAME` varchar(45) DEFAULT NULL,
   `ADMIN` varchar(5) DEFAULT NULL,
   PRIMARY KEY (`CODE`)
-)
+);
 

@@ -2,6 +2,7 @@ package com.practice.semi.vo;
 
 
 
+import java.time.LocalDate;
 import java.util.Date;
 
 import jakarta.persistence.Column;
@@ -42,7 +43,7 @@ public class Book {
 	private String publisher;
 	
 	@Column
-	private Date date;
+	private LocalDate date;
 	
 	@Column
 	private String image;

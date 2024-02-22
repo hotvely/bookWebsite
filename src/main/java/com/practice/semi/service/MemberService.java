@@ -2,7 +2,6 @@ package com.practice.semi.service;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import com.practice.semi.dao.MemberDAO;
@@ -28,7 +27,7 @@ public class MemberService {
 	}
 	
 	// 로그인 만들어야됨
-	public Member loginMember(String id, String password, PasswordEncoder passwordEncoder) {
+	public Member loginMember(String id, String password) {
 		
 		return null;
 	}

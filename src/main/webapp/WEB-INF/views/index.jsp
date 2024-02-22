@@ -1,20 +1,23 @@
-	<%@ page language="java" contentType="text/html; charset=UTF-8"
-	pageEncoding="UTF-8"%>
+
+<%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
 <meta charset="UTF-8">
 <title>Insert title here</title>
- <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
 	<script>	
 		
 		let books = null;
-	
-		const addBook = () => {
-			console.log("hello")
-		};
+		
+		const moveDetail = () => {
+			window.location.href = "bookDetail";
+			
+			
+		}
+		
 		
 		const showAll = () => {
 			$.ajax({
@@ -24,25 +27,56 @@
 					console.log(data);
 					books = [...data];
 					
+					let HTML = '';
 					books.map((book) => {
-						$("#bookList").append('<tr><td width="100px">'+book.bookTitle+'</td>'+
-								'<td width="100px">'+ book.bookDetail+'</td>'+
-								'<td width="100px">'+ book.price+'</td><tr>');
-					});
+						HTML +='<tr><td>' + 
+						(book.image != null ? 
+						'<img alt="" src="'+book.image+'"/></td>' : 
+						'<img width="100px" alt="xxx" src="https://photo.coolenjoy.co.kr/data/editor/1901/20190128172926_3c9c1896362cdd6a8e5f782db9817014_1wii.jpg"/></td>' )+
+					 	'<td width="100px"><a href="book/detail?code='+book.code+'">'+book.title+'<a/></td>'+
+						'<td width="100px">'+ book.authority+'</td>'+
+						'<td width="100px">'+ book.price+'</td>'+
+						'<td width="100px">'+ book.publisher+'</td>'+
+						'<td width="100px">'+ book.date+'</td><tr>';
+						});
+					console.log(HTML);
+					$('#bookList').append(HTML);
 				}
 			});
 		}
-
-		
-	
+		showAll();
 	</script>
 
+	<div>
+		<a href="member/loginView">로그인</a>
+		<a href="member/registerView">회원가입</a>
 
-	hello
-	<button onclick="addBook()">addBook</button>
-	<button onclick="showAll()">showAll</button>
-	<button><a href="/book/create">add</a></button>
-	
-	<div id="bookList"></div>
+	</div>
+	<img src="http://www.adullammission.org/files/attach/images/941/494/001/d682e4726411430055c0b856df54297b.jpg" />
+	<!-- <button onclick="showAll()">showAll</button> -->
+
+	<a href="/book/create">
+		<button>책추가</button>
+	</a>
+
+	<table id="bookList">
+		<tr>
+			<td>책표지</td>
+			<td>제목</td>
+			<td>글쓴이</td>
+			<td>가격</td>
+			<td>출판사</td>
+			<td>출간일</td>
+		</tr>
+		<tr>
+			<td colspan="6">
+				<hr>
+			</td>
+			
+			
+			
+		</tr>
+	</table>
+
 </body>
 </html>
