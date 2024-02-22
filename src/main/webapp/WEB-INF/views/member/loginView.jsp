@@ -36,7 +36,7 @@
 	 			data: member,	 			
 	 				success: function(response){	
 						console.log(response);
-						if(JSON.parse(response)){
+						if(response){
 							window.location.href = "/";
 						}else{
 							console.log('로그인 실패');						

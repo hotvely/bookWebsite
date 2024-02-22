@@ -149,6 +149,7 @@ public class MemberController {
 	}
 
 	// 로그인
+	// 세션 생성 후 저장
 	@PostMapping("/login")
 	public ResponseEntity<Boolean> login(@RequestParam("username") String id,
 			@RequestParam("password") String password, HttpServletRequest request)  {
@@ -158,7 +159,7 @@ public class MemberController {
 		
 			if(member != null) {
 				session = request.getSession();
-				session.setAttribute("member", member);
+				session.setAttribute("member", member); // key value
 				return ResponseEntity.ok(true);
 			}
 		} catch (Exception e) {
@@ -167,28 +168,29 @@ public class MemberController {
 		return ResponseEntity.ok(false);
 	}
 	
-	@PostMapping("/isLogin")
-	public ResponseEntity<MemberDTO> isLogin()
-	{
-		Member member = (Member)session.getAttribute("member");
-		
-		if(member != null) {
-			MemberDTO dto  = MemberDTO.builder().id(member.getId()).nickName(member.getNickname()).build();		
-			return ResponseEntity.ok(dto);
-		}
-		
-		
-		return ResponseEntity.ok(null);
-	}
+	// 생성한 session에 MemberDTO 객체를 담고 반환
+//	@PostMapping("/isLogin")
+//	public ResponseEntity<MemberDTO> isLogin(){
+//		
+//		Member member = (Member)session.getAttribute("member");
+//		
+//		if(member != null) {
+//			MemberDTO dto  = MemberDTO.builder().id(member.getId()).nickName(member.getNickname()).build();		
+//			return ResponseEntity.ok(dto);
+//		}
+//		return ResponseEntity.ok(null);
+//	}
 
 	// 로그아웃
-	@PostMapping("/logout")
-	public void logout(HttpServletRequest request) {
+	@GetMapping("/logout")
+	public String logout(HttpServletRequest request) {
 
 		HttpSession session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
 		}
+		
+		return "index";
 	}
 
 	// 회원수정

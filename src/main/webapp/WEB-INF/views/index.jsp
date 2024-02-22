@@ -2,6 +2,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 
+
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,9 +13,16 @@
 
 </head>
 <body>
-	<%@ include file="header.jsp"%>
+	<jsp:include page="/header" />
+
+	이 줄 부터는 메인 페이지 입니다..
+
+
+
+
+
 	<script>	
-		
+		console.log(member);
 		let books = null;
 	
 		const addBook = () => {
@@ -38,37 +47,40 @@
 		}
 		
 		
-		// 로그인시 멤버 가져오는 로직
-		const getMember = () => {
-			$.ajax({
-				url: "/member/isLogin",
-				method: "POST",
-				success: function(data){
-					console.log(data);
-					  document.cookie = "member=" + JSON.stringify(data);
-					
-				}
-			})
+		const handlerAfterMember = (id) => {
+			if( id != undefined || id != null){
+				$('#afterMember').append(id + "님 반갑습니다.");
+			}
 		}
 		
-		getMember();
+				
+		// 로그인시 멤버 정보 가져오는 로직
 		
-	
+		/*
+		$("#logout").click(function() {
+		        $.ajax({
+		            type: "POST",
+		            url: "/member/logout",
+		            success: function() {
+		                console.log("로그아웃 성공");
+		                location.reload(); 
+		            },
+		            error: function() {
+		                console.log("로그아웃 실패");
+		            }
+		        });
+		    });
+		});
+		*/
 	</script>
 
-	${test} hello
+	<div id="afterMember"></div>
 	<button onclick="addBook()">addBook</button>
 	<button onclick="showAll()">showAll</button>
 	<button>
 		<a href="/book/create">add</a>
 	</button>
-	<button>
-		<a href="/member/register" style="text-decoration: none; color: black">member
-			register</a>
-	</button>
-	<button>
-		<a href="/member/login" style="text-decoration: none; color: black">login</a>
-	</button>
+
 
 	<div id="bookList"></div>
 </body>
