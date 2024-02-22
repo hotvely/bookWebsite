@@ -77,23 +77,14 @@ public class MemberController {
 	}
 
 	@GetMapping("/myPage")
-	public ModelAndView myPageView(HttpServletRequest request) {
+	public ModelAndView myPageView() {
 		ModelAndView mv = new ModelAndView();
 
-		if (session.getAttribute("member") == null) {
-			mv.setViewName("/member/loginView");
-			return mv;
-		}
+		mv.setViewName("/member/myPageView");
 
-		Member loginMember = (Member) session.getAttribute("loginMember");
-		if (loginMember != null) {
-			mv.addObject("loginMember", loginMember);
-			mv.setViewName("/member/myPageView");
-			return mv;
-		} 
-			return null;
-		}
-	
+		return mv;
+
+	}
 
 	// --------------------- page view
 
@@ -151,13 +142,13 @@ public class MemberController {
 	// 로그인
 	// 세션 생성 후 저장
 	@PostMapping("/login")
-	public ResponseEntity<Boolean> login(@RequestParam("username") String id,
-			@RequestParam("password") String password, HttpServletRequest request)  {
+	public ResponseEntity<Boolean> login(@RequestParam("username") String id, @RequestParam("password") String password,
+			HttpServletRequest request) {
 		log.info("로그인 성공하냐");
 		Member member = service.loginMember(id, password);
 		try {
-		
-			if(member != null) {
+
+			if (member != null) {
 				session = request.getSession();
 				session.setAttribute("member", member); // key value
 				return ResponseEntity.ok(true);
@@ -167,7 +158,7 @@ public class MemberController {
 		}
 		return ResponseEntity.ok(false);
 	}
-	
+
 	// 생성한 session에 MemberDTO 객체를 담고 반환
 //	@PostMapping("/isLogin")
 //	public ResponseEntity<MemberDTO> isLogin(){
@@ -189,24 +180,16 @@ public class MemberController {
 		if (session != null) {
 			session.invalidate();
 		}
-		
+
 		return "index";
 	}
 
 	// 회원수정
 	@PutMapping("/update")
-	public ResponseEntity<Member> update(@RequestParam("username") String id,
-			@RequestParam("password") String password,
-			@RequestParam("email") String email,
-			@RequestParam("phone") String phone,
+	public ResponseEntity<Member> update(@RequestParam("username") String id, @RequestParam("password") String password,
+			@RequestParam("email") String email, @RequestParam("phone") String phone,
 			@RequestParam("nickname") String nickname) {
-		Member member = Member.builder()
-				.id(id)
-				.password(password)
-				.email(email)
-				.phone(phone)
-				.nickname(nickname)
-				.build();
+		Member member = Member.builder().id(id).password(password).email(email).phone(phone).nickname(nickname).build();
 		Member updateMember = service.create(member);
 		log.info("수정" + member.toString());
 		return ResponseEntity.ok(updateMember);
