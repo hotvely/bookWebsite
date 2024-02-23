@@ -34,7 +34,7 @@ public class MainController {
 
 	@GetMapping("/header")
 	public ModelAndView header(HttpSession session) throws JsonProcessingException {
-		log.info("headercontroller");
+//		log.info("headercontroller");
 
 //		Member member = (Member)session.getAttribute("member");
 		
@@ -52,7 +52,7 @@ public class MainController {
 	
 	@PostMapping("/header")
 	public ResponseEntity<Member> header2(HttpSession session) throws JsonProcessingException {
-		log.info("headercontroller");
+//		log.info("headercontroller");
 
 		Member member = (Member)session.getAttribute("member");
 		

@@ -23,6 +23,8 @@ import com.practice.semi.service.BookService;
 import com.practice.semi.vo.Book;
 
 import ch.qos.logback.core.model.Model;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 import net.bytebuddy.utility.privilege.GetSystemPropertyAction;
 
@@ -33,11 +35,11 @@ public class BookController {
 
 	@Autowired
 	BookService service;
-
+	HttpSession session = null ;
 	@GetMapping("/showAll")
 	public ResponseEntity<List<Book>> showAll(Model model) {
 		List<Book> list = service.showAll();
-		log.info(list.toString());
+//		log.info(list.toString());
 		return ResponseEntity.ok(service.showAll());
 	}
 
@@ -55,9 +57,10 @@ public class BookController {
 	}
 	
 	@PostMapping("/show")
-	public ResponseEntity<Book> show(@RequestParam(name="code")int code){ 
+	public ResponseEntity<Book> show(@RequestParam(name="code")int code,HttpServletRequest request){ 
 		Book book = service.show(code);
-		
+		session = request.getSession();
+		session.setAttribute("book", book);
 		return ResponseEntity.ok(book);
 	}
 
@@ -75,7 +78,7 @@ public class BookController {
 			@RequestParam(name = "date", required = false) String date,
 			@RequestParam(name = "image", required = false) String image) {
 
-		log.info("" + date);
+//		log.info("" + date);
 		if (subcategory == null)
 			subcategory = 0;
 
@@ -98,7 +101,7 @@ public class BookController {
 		Book book = Book.builder().title(title).detail(detail).authority(authority).subcategory(subcategory)
 				.price(price).publisher(publisher).date(localDate).image(image).build();
 
-		log.info(book.toString());
+//		log.info(book.toString());
 
 		return ResponseEntity.ok(service.create(book));
 	}

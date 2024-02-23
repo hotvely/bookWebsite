@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import com.practice.semi.service.MemberService;
 import com.practice.semi.vo.Member;
@@ -22,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@RestController
 @RequestMapping("/member")
 @Slf4j
 public class MemberController {
@@ -116,11 +117,17 @@ public class MemberController {
 
 	// 회원가입
 	@PostMapping("/register")
-	public ResponseEntity<Member> register(@RequestParam("username") String id,
+	public ResponseEntity<Member> register(@RequestParam("username") String username,
 			@RequestParam("password") String password, @RequestParam("email") String email,
 			@RequestParam("phone") String phone, @RequestParam("nickname") String nickname) {
 		log.info("register");
-		Member member = Member.builder().id(id).password(password).email(email).phone(phone).nickname(nickname).build();
+		Member member = Member.builder()
+				.id(username)
+				.password(password)
+				.email(email)
+				.phone(phone)
+				.nickname(nickname)
+				.build();
 		Member registerMember = service.create(member);
 		log.info("가입 " + member.toString());
 		return ResponseEntity.ok(registerMember);
@@ -142,7 +149,8 @@ public class MemberController {
 	// 로그인
 	// 세션 생성 후 저장
 	@PostMapping("/login")
-	public ResponseEntity<Boolean> login(@RequestParam("username") String id, @RequestParam("password") String password,
+	public ResponseEntity<Boolean> login(@RequestParam("username") String id, 
+			@RequestParam("password") String password,
 			HttpServletRequest request) {
 		log.info("로그인 성공하냐");
 		Member member = service.loginMember(id, password);
@@ -186,13 +194,30 @@ public class MemberController {
 
 	// 회원수정
 	@PutMapping("/update")
-	public ResponseEntity<Member> update(@RequestParam("username") String id, @RequestParam("password") String password,
-			@RequestParam("email") String email, @RequestParam("phone") String phone,
-			@RequestParam("nickname") String nickname) {
-		Member member = Member.builder().id(id).password(password).email(email).phone(phone).nickname(nickname).build();
-		Member updateMember = service.create(member);
-		log.info("수정" + member.toString());
-		return ResponseEntity.ok(updateMember);
+	public ResponseEntity<Member> update(
+			@RequestParam("userCode") int code,
+			@RequestParam("username") String id,
+			@RequestParam("password") String password,
+			@RequestParam("email") String email, 
+			@RequestParam("phone") String phone,
+			@RequestParam("nickname") String nickname,
+			@RequestParam("admin") String admin,
+			HttpSession session) {
+		log.info("update 오냐");
+		 Member member = (Member) session.getAttribute("member");
+		 
+		Member eidtMember = Member.builder()
+				.userCode(code)
+				.id(id)
+				.password(password)
+				.email(email)
+				.phone(phone)
+				.nickname(nickname)
+				.admin(admin)
+				.build();		
+			member = service.update(eidtMember);
+		log.info("수정" + eidtMember.toString());
+		return ResponseEntity.ok(eidtMember);
 	}
 
 	// 회원탈퇴

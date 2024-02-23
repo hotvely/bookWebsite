@@ -72,7 +72,7 @@ public class MemberService {
 				log.info("member update : " + member);
 				return dao.save(member);
 			}else {
-				return dao.save(member);
+				return null;
 			}
 		}
 

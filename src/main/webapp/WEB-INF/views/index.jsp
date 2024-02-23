@@ -18,7 +18,7 @@
 
 
 	<script>	
-		console.log(member);
+		
 		let books = null;
 		
 		const moveDetail = () => {
@@ -33,7 +33,7 @@
 				url: "http://localhost:8080/book/showAll",
 				method: "GET",
 				success: function(data){
-					console.log(data);
+			//		console.log(data);
 					books = [...data];
 					
 					let HTML = '';
@@ -48,7 +48,7 @@
 						'<td width="100px">'+ book.publisher+'</td>'+
 						'<td width="100px">'+ book.date+'</td><tr>';
 						});
-					console.log(HTML);
+			//		console.log(HTML);
 					$('#bookList').append(HTML);
 				}
 			});
