@@ -30,7 +30,7 @@ public class MemberService {
 		return dao.findByPwd(id, email);
 	}
 	
-	// 로그인 만들어야됨
+	// 로그인 
 	public Member loginMember(String id, String password) {
 		Member member = dao.findByStringId(id);
 		if(member != null && password.equals(member.getPassword())) {
@@ -43,7 +43,7 @@ public class MemberService {
 		return dao.findAll();
 	}
 	
-	 public Member show(Integer code) {
+	 public Member show(int code) {
 	     Member member = dao.findById(code).orElse(null);
 	     if(member != null) {
 	    	 return member;
@@ -67,13 +67,14 @@ public class MemberService {
 	}
 	
 	public Member update(Member vo) {
-		Member member = dao.findById(vo.getUserCode()).orElse(null);
-			if(member != null) {
-				log.info("member update : " + member);
-				return dao.save(member);
+		Member member = dao.findById(vo.getUsercode()).orElse(null);
+			if(member != null) {	
+				log.info("업데이트 서비스 : " + vo);
+				return dao.save(vo);
 			}else {
-				return null;
-			}
+				log.info("실패 : " + vo);
+				return dao.save(vo);
+			}			
 		}
 
 	public void delete(int code) {

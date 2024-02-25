@@ -27,7 +27,7 @@ public interface MemberDAO extends JpaRepository<Member, Integer> {
 	Member login(@Param("id")String id, @Param("password")String password);
 	
 	
-//	@Query(value = "SELECT * FROM MEMBER WHERE CODE = :userCode", nativeQuery = true)
+//	@Query(value = "SELECT * FROM MEMBER WHERE CODE = :usercode", nativeQuery = true)
 //	void deleteByCode(@Param("userCode") int userCode); 
 	
 }

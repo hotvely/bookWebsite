@@ -18,7 +18,7 @@
 	
 	
 	<div class="form-el">
-	<input type = "hidden" id = "usercode"  value = "${member.userCode}" />
+	<input type = "hidden" id = "usercode"  value = "${member.usercode}" />
 	
 	<input type = "hidden" id = username  value = "${member.id}" />
 
@@ -48,13 +48,13 @@
 	<script>
 		$('#updateProfile').on('click',function(){
 			let member = {	
-					id:${'#username'}.val(),
-					admin:$('#admin').val(),
-					userCode:$('#usercode').val(),
+					usercode:$('#usercode').val(),
+					username:$('#username').val(),
 					password:$('#password').val(),
 					email:$('#email').val(),
 					phone:$('#phone').val(),
-					nickname:$('#nickname').val()
+					nickname:$('#nickname').val(),
+					admin:$('#admin').val()
 			};
 			$.ajax({
 				url:'/member/update',
@@ -63,9 +63,9 @@
 				success: function(response){
 					
 					console.log(response);
-					if(response != null){
-						window.location.href ="/"
-					}
+					/* if(response != null){
+					window.location.href ="/"
+					} */
 				},
 				error: function(error){
 					console.log('정보수정 에러')

@@ -22,7 +22,7 @@ public class Member {
 	@Id
 	@Column(name = "CODE")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)   
-	private int userCode;
+	private int usercode;
 	
 	@Column(name = "ID")
 	private String id;
