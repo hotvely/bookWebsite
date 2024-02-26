@@ -19,31 +19,35 @@
 
 	<script>	
 		let books = null;
-		
-		const moveDetail = () => {
-			window.location.href = "bookDetail";
-			
-			
-		}
-		
-		
+		let startNum = ${currPage};		
+		console.log(startNum);
 		const showAll = () => {
 			$.ajax({
-				url: "/book/showAll",
-				method: "GET",
+				url: "/book/showAll?pageNum=" + startNum,
+				method: "GET",			
 				success: function(data){
 					console.log(data);
 					books = [...data.bookList];
 					
-					console.log("showall book");
+					const startPage = (Math.floor((startNum - 1) / 5) * 5) + 1;
+					if(data.hasPrev && startPage != 1)
+						$('#page').append('<a href="/?pageNum='+(startPage-5)+ '"><button><</button></a>');
 					
-					$('#page').append('<a href="#"><button><</button></a>');
-					for(let idx = data.currPage; idx < 5; idx++){
-						$('#page').append('<a href="#"><button>' + (idx + 1)+ '</button></a>');
+					// 실제 페이지들 나열 할 곳..
+					let endPage = startPage + 5;
+
+					if(endPage > data.totalPages){
+						endPage = data.totalPages;
+						$('#page').append('<a href="/?pageNum=' + endPage + '"><button>' +endPage + '</button></a>');
 					}
-					$('#page').append('<a href="#"><button>></button></a>');
+					for(let idx = startPage ; idx < endPage; idx++){
+						$('#page').append('<a href="/?pageNum=' + idx + '"><button>' + (idx)+ '</button></a>');
+					}
 					
-					/* let HTML = '';
+					if(data.hasNext)
+						$('#page').append('<a href="/?pageNum=' + (startPage+5) + '"><button>></button></a>');
+					
+					 let HTML = '';
 					books.map((book) => {
 						HTML +='<tr><td>' + 
 						(book.image != null ? 
@@ -55,8 +59,7 @@
 						'<td width="100px">'+ book.publisher+'</td>'+
 						'<td width="100px">'+ book.date+'</td><tr>';
 						});
-					console.log(HTML);
-					$('#bookList').append(HTML); */
+					$('#bookList').append(HTML); 
 				}
 			});
 		}

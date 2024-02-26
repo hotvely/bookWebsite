@@ -37,7 +37,8 @@ public class BookController {
 	BookService service;
 
 	@GetMapping("/showAll")
-	public ResponseEntity<Paging> showAll(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+	public ResponseEntity<Paging> showAll(
+			@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
 			@RequestParam(name = "sortNum", defaultValue = "1") int sortNum,
 			Model model) {
 
@@ -49,7 +50,8 @@ public class BookController {
 			sort = Sort.by("code").descending();
 			break;
 		}
-		log.info("shoall init");
+		
+		log.info("pageNum : " + pageNum + "  sortNum : " + sortNum);
 
 		Pageable pageable = (Pageable) PageRequest.of(pageNum - 1, 2, sort);
 		Page<Book> result = service.showAll(pageable);

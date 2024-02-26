@@ -6,6 +6,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
@@ -23,12 +24,12 @@ import lombok.extern.slf4j.Slf4j;
 public class MainController {
 
 	@GetMapping({ "/", "/main" })
-	public ModelAndView home() {
+	public ModelAndView home(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum) {
 		log.info("main page init !! ");
 
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("index");
-		mv.addObject("test", 100);
+		mv.addObject("currPage", pageNum);
 		return mv;
 	}
 
