@@ -211,14 +211,18 @@ public class MemberController {
 		return null;
 	}
 	// 회원탈퇴
-	@DeleteMapping("/delete")
+	@DeleteMapping("/delete{code}")
 	public ResponseEntity<Boolean> deleteMember(@PathVariable int code) {
+		
+		Member member = (Member) session.getAttribute("member");
 		try {
 			service.delete(code);
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.info("삭제 성공");
 			return ResponseEntity.ok(false);
 		}
+		log.info("삭제 실패");
 		return ResponseEntity.ok(true);
 	}
 

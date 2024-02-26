@@ -41,12 +41,16 @@
 	
 	<br/>
 	
-	<button type="submit" value="정보수정" id=updateProfile>
-		수정
+	<button type="submit" value = "정보수정" id = "updateMember">
+		정보수정
 	</button>
 	
+	<button type="submit"  E"value="회원탈퇴" id="deleteMember">
+    회원탈퇴
+</button>
+	
 	<script>
-		$('#updateProfile').on('click',function(){
+		$('#updateMember').on('click',function(){
 			let member = {	
 					usercode:$('#usercode').val(),
 					username:$('#username').val(),
@@ -58,20 +62,42 @@
 			};
 			$.ajax({
 				url:'/member/update',
-				type: 'PUT',
-				data: member,
+				type:'PUT',
+				data:member,
 				success: function(response){
 					
 					console.log(response);
-					/* if(response != null){
+					alert("정보수정 성공");
+					 if(response != null){
 					window.location.href ="/"
-					} */
+					} 
 				},
 				error: function(error){
 					console.log('정보수정 에러')
 				}
 			});
 		})
+	</script>
+	
+	<script>
+	$('#deleteMember').on('click',function(){
+	
+		$.ajax({
+			url:'/member/delete' + code,
+			type:'DELETE',
+			success: function(response){
+				
+				console.log(response);
+				alert("회원탙퇴 성공");
+				 if(response != null){
+				window.location.href ="/"
+				} 
+			},
+			error: function(error){
+				console.log('회원탙퇴 에러')
+			}
+		});
+	})
 	</script>
 		
 	<script>
