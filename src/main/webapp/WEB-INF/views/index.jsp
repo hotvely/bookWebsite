@@ -9,7 +9,7 @@
 
 </head>
 <body>
-	<%@ include file="/WEB-INF/views/header.jsp" %>
+	<%@ include file="/WEB-INF/views/header.jsp"%>
 
 	이 줄 부터는 메인 페이지 입니다..
 
@@ -18,7 +18,6 @@
 
 
 	<script>	
-		console.log(member);
 		let books = null;
 		
 		const moveDetail = () => {
@@ -30,13 +29,21 @@
 		
 		const showAll = () => {
 			$.ajax({
-				url: "http://localhost:8080/book/showAll",
+				url: "/book/showAll",
 				method: "GET",
 				success: function(data){
 					console.log(data);
-					books = [...data];
+					books = [...data.bookList];
 					
-					let HTML = '';
+					console.log("showall book");
+					
+					$('#page').append('<a href="#"><button><</button></a>');
+					for(let idx = data.currPage; idx < 5; idx++){
+						$('#page').append('<a href="#"><button>' + (idx + 1)+ '</button></a>');
+					}
+					$('#page').append('<a href="#"><button>></button></a>');
+					
+					/* let HTML = '';
 					books.map((book) => {
 						HTML +='<tr><td>' + 
 						(book.image != null ? 
@@ -49,7 +56,7 @@
 						'<td width="100px">'+ book.date+'</td><tr>';
 						});
 					console.log(HTML);
-					$('#bookList').append(HTML);
+					$('#bookList').append(HTML); */
 				}
 			});
 		}
@@ -97,11 +104,9 @@
 			<td colspan="6">
 				<hr>
 			</td>
-			
-			
-			
 		</tr>
 	</table>
+	<div id=page></div>
 
 	<div id="bookList"></div>
 </body>

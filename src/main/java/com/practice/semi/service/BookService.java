@@ -3,6 +3,8 @@ package com.practice.semi.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.practice.semi.dao.BookDAO;
@@ -24,6 +26,11 @@ public class BookService {
 	
 	public Book create(Book book) {
 		return dao.save(book);
+	}
+
+	public Page<Book> showAll(Pageable pageable) {
+		// TODO 자동 생성된 메소드 스텁
+		return dao.findAll(pageable);
 	}
 
 }
