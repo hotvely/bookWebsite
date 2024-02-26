@@ -35,14 +35,15 @@
 					
 					// 실제 페이지들 나열 할 곳..
 					let endPage = startPage + 5;
-
 					if(endPage > data.totalPages){
 						endPage = data.totalPages;
-						$('#page').append('<a href="/?pageNum=' + endPage + '"><button>' +endPage + '</button></a>');
 					}
 					for(let idx = startPage ; idx < endPage; idx++){
 						$('#page').append('<a href="/?pageNum=' + idx + '"><button>' + (idx)+ '</button></a>');
 					}
+					if(startPage == endPage)
+						$('#page').append('<a href="/?pageNum=' + endPage + '"><button>' +endPage + '</button></a>');
+					
 					
 					if(data.hasNext)
 						$('#page').append('<a href="/?pageNum=' + (startPage+5) + '"><button>></button></a>');
@@ -50,13 +51,11 @@
 					 let HTML = '';
 					books.map((book) => {
 						HTML +='<tr><td>' + 
-						(book.image != null ? 
-						'<img alt="" src="'+book.image+'"/></td>' : 
-						'<img width="100px" alt="xxx" src="https://photo.coolenjoy.co.kr/data/editor/1901/20190128172926_3c9c1896362cdd6a8e5f782db9817014_1wii.jpg"/></td>' )+
-					 	'<td width="100px"><a href="book/detail?code='+book.code+'">'+book.title+'<a/></td>'+
-						'<td width="100px">'+ book.authority+'</td>'+
-						'<td width="100px">'+ book.price+'</td>'+
-						'<td width="100px">'+ book.publisher+'</td>'+
+						'<img width="100px" alt="xxx" src="' + (book.image != null ? book.image : "/images/basic.jpeg") + '"/></td>' +
+					 	'<td width="250px"><a href="book/detail?code='+book.code+'">'+book.title+'<a/></td>'+
+						'<td width="170px">'+ book.authority+'</td>'+
+						'<td width="120px">'+ book.price+' 원</td>'+
+						'<td width="150px">'+ book.publisher+'</td>'+
 						'<td width="100px">'+ book.date+'</td><tr>';
 						});
 					$('#bookList').append(HTML); 
@@ -64,10 +63,6 @@
 			});
 		}
 		showAll();
-
-	// <img src="http://www.adullammission.org/files/attach/images/941/494/001/d682e4726411430055c0b856df54297b.jpg" />
-	//  <button onclick="showAll()">showAll</button> 
-
 
 		
 		
@@ -86,9 +81,7 @@
 	</script>
 
 	<div id="afterMember"></div>
-	<button onclick="addBook()">addBook</button>
-	<!-- <button onclick="showAll()">showAll</button> -->
-
+	<div id="addBooks"></div>
 
 	<a href="/book/create">
 		<button>책추가</button>
@@ -111,6 +104,5 @@
 	</table>
 	<div id=page></div>
 
-	<div id="bookList"></div>
 </body>
 </html>

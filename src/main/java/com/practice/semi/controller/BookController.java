@@ -53,7 +53,7 @@ public class BookController {
 		
 		log.info("pageNum : " + pageNum + "  sortNum : " + sortNum);
 
-		Pageable pageable = (Pageable) PageRequest.of(pageNum - 1, 2, sort);
+		Pageable pageable = (Pageable) PageRequest.of(pageNum - 1, 4, sort);
 		Page<Book> result = service.showAll(pageable);
 		Paging paging = new Paging();
 		paging.setBookList(result.getContent());
