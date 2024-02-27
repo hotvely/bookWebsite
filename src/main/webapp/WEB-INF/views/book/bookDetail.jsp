@@ -21,7 +21,7 @@
 				<div id="price">가격 :</div>
 				<div id="date">출간일 :</div>
 			</div>
-			<div><button>결제하기</button></div>
+			<div><button onclick="addCart()">장바구니 담기</button></div>
 		</div>
 
 	</div>
@@ -52,6 +52,47 @@
 				}
 			}
 		});
+		
+		const getCookie = (key) => {
+			const cookies = document.cookie.split(';');
+			for(let elem of cookies){
+				let cookie = elem.trim();
+				if(cookie.startsWith(key + '=')){
+					return decodeURIComponent(cookie.substring(key.length + 1));
+				}
+			}
+			return null;
+		}
+		
+		const setCookie = (key, value, min) => {
+			let date = new Date();
+			date.setMinutes(date.getMinutes() + min);
+		    // 설정 일수만큼 현재시간에 만료값으로 지정
+		    value = decodeURIComponent(value) + ((min == null) ? '' : ';expires=' + date.toUTCString());
+		    document.cookie = key + '=' + value;
+		}
+		
+		
+		
+		const addCart = () => {
+			let cartItem = [];
+		 	if(getCookie('cart')!=null){
+				console.log(JSON.parse(getCookie('cart')));
+				cartItem = [...JSON.parse(getCookie('cart'))];
+		 	}
+		 	for(let elem of cartItem){
+		 		if(elem.code == book.code){
+		 			console.log("같은 아이템 있음;;");
+		 			return null;
+		 		}		 		
+		 	}
+		 	
+		 	cartItem = [...cartItem, book];
+		 	setCookie('cart', JSON.stringify(cartItem), 60);
+		 	console.log(JSON.parse(getCookie('cart')));
+		 	
+			
+		}
 	
 	
 	</script>
