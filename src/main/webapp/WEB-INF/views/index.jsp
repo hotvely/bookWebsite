@@ -20,18 +20,16 @@
 	<script>	
 		
 		let books = null;
-		let startNum = ${currPage};		
-		console.log(startNum);
 		const showAll = () => {
 			$.ajax({
-				url: "/book/showAll?pageNum=" + startNum,
+				url: "/book/showAll?pageNum=" + ${currPage},
 				method: "GET",			
 				success: function(data){
 					console.log(data);
 					books = [...data.bookList];
 					
-					const startPage = (Math.floor((startNum - 1) / 5) * 5) + 1;
-					if(data.hasPrev && startPage != 1)
+					const startPage = (Math.floor((${currPage} - 1) / 5) * 5) + 1;
+					if(data.hasPrev && startPage > 5)
 						$('#page').append('<a href="/?pageNum='+(startPage-5)+ '"><button><</button></a>');
 					
 					// 실제 페이지들 나열 할 곳..
@@ -39,14 +37,17 @@
 					if(endPage > data.totalPages){
 						endPage = data.totalPages;
 					}
+					
+					console.log("endPage", endPage);
 					for(let idx = startPage ; idx < endPage; idx++){
-						$('#page').append('<a href="/?pageNum=' + idx + '"><button>' + (idx)+ '</button></a>');
+						$('#page').append('<a href="/?pageNum=' + (idx) + '"><button>' + (idx)+ '</button></a>');
 					}
-					if(startPage == endPage)
+					
+					if(startPage == data.totalPages || data.totalPages <= 5)
 						$('#page').append('<a href="/?pageNum=' + endPage + '"><button>' +endPage + '</button></a>');
 					
-					
-					if(data.hasNext)
+					console.log("startPage + 5 ",startPage + 5);
+					if(data.hasNext && endPage - startPage >= 4)
 						$('#page').append('<a href="/?pageNum=' + (startPage+5) + '"><button>></button></a>');
 					
 					 let HTML = '';
