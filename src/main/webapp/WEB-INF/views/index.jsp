@@ -18,6 +18,7 @@
 
 
 	<script>	
+		
 		let books = null;
 		let startNum = ${currPage};		
 		console.log(startNum);

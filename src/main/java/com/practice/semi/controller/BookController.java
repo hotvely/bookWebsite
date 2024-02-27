@@ -35,7 +35,6 @@ public class BookController {
 
 	@Autowired
 	BookService service;
-
 	@GetMapping("/showAll")
 	public ResponseEntity<Paging> showAll(
 			@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
@@ -101,7 +100,7 @@ public class BookController {
 			@RequestParam(name = "date", required = false) String date,
 			@RequestParam(name = "image", required = false) String image) {
 
-		log.info("" + date);
+//		log.info("" + date);
 		if (subcategory == null)
 			subcategory = 0;
 
@@ -124,7 +123,7 @@ public class BookController {
 		Book book = Book.builder().title(title).detail(detail).authority(authority).subcategory(subcategory)
 				.price(price).publisher(publisher).date(localDate).image(image).build();
 
-		log.info(book.toString());
+//		log.info(book.toString());
 
 		return ResponseEntity.ok(service.create(book));
 	}

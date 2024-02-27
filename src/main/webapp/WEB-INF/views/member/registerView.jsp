@@ -32,7 +32,7 @@
 	
 	<br/>
 	
-	<button type="submit" value="회원가입" id=register>
+	<button type="submit" value="회원가입" id="register">
 		가입
 	</button>
 	

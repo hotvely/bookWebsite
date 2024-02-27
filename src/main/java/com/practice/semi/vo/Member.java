@@ -22,24 +22,24 @@ public class Member {
 	@Id
 	@Column(name = "CODE")
 	@GeneratedValue(strategy = GenerationType.IDENTITY)   
-	int userCode;
+	private int usercode;
 	
 	@Column(name = "ID")
-	String id;
+	private String id;
 	
 	@Column(name = "PASSWORD")
-	String password;
+	private String password;
 	
 	@Column(name = "EMAIL")
-	String email;
+	private String email;
 	
 	@Column(name = "PHONE")
-	String phone;
+	private String phone;
 	
 	@Column(name = "NICKNAME")
-	String nickname;
+	private String nickname;
 	
 	@Column(name = "ADMIN")
-	String admin;
+	private String admin;
 	
 }

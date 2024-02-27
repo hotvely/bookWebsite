@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 import com.practice.semi.service.MemberService;
 import com.practice.semi.vo.Member;
@@ -22,7 +23,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
-@Controller
+@RestController
 @RequestMapping("/member")
 @Slf4j
 public class MemberController {
@@ -116,11 +117,20 @@ public class MemberController {
 
 	// 회원가입
 	@PostMapping("/register")
-	public ResponseEntity<Member> register(@RequestParam("username") String id,
-			@RequestParam("password") String password, @RequestParam("email") String email,
-			@RequestParam("phone") String phone, @RequestParam("nickname") String nickname) {
+	public ResponseEntity<Member> register(
+			@RequestParam("username")String username,
+			@RequestParam("password")String password,
+			@RequestParam("email") String email,
+			@RequestParam("phone") String phone,
+			@RequestParam("nickname") String nickname) {
 		log.info("register");
-		Member member = Member.builder().id(id).password(password).email(email).phone(phone).nickname(nickname).build();
+		Member member = Member.builder()
+				.id(username)
+				.password(password)
+				.email(email)
+				.phone(phone)
+				.nickname(nickname)
+				.build();
 		Member registerMember = service.create(member);
 		log.info("가입 " + member.toString());
 		return ResponseEntity.ok(registerMember);
@@ -142,7 +152,8 @@ public class MemberController {
 	// 로그인
 	// 세션 생성 후 저장
 	@PostMapping("/login")
-	public ResponseEntity<Boolean> login(@RequestParam("username") String id, @RequestParam("password") String password,
+	public ResponseEntity<Boolean> login(@RequestParam("username") String id, 
+			@RequestParam("password") String password,
 			HttpServletRequest request) {
 		log.info("로그인 성공하냐");
 		Member member = service.loginMember(id, password);
@@ -158,52 +169,60 @@ public class MemberController {
 		}
 		return ResponseEntity.ok(false);
 	}
-
-	// 생성한 session에 MemberDTO 객체를 담고 반환
-//	@PostMapping("/isLogin")
-//	public ResponseEntity<MemberDTO> isLogin(){
-//		
-//		Member member = (Member)session.getAttribute("member");
-//		
-//		if(member != null) {
-//			MemberDTO dto  = MemberDTO.builder().id(member.getId()).nickName(member.getNickname()).build();		
-//			return ResponseEntity.ok(dto);
-//		}
-//		return ResponseEntity.ok(null);
-//	}
-
 	// 로그아웃
 	@GetMapping("/logout")
 	public String logout(HttpServletRequest request) {
 
-		HttpSession session = request.getSession(false);
+			session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
 		}
-
 		return "index";
 	}
 
 	// 회원수정
 	@PutMapping("/update")
-	public ResponseEntity<Member> update(@RequestParam("username") String id, @RequestParam("password") String password,
-			@RequestParam("email") String email, @RequestParam("phone") String phone,
-			@RequestParam("nickname") String nickname) {
-		Member member = Member.builder().id(id).password(password).email(email).phone(phone).nickname(nickname).build();
-		Member updateMember = service.create(member);
-		log.info("수정" + member.toString());
-		return ResponseEntity.ok(updateMember);
+	public ResponseEntity<Member> update(
+			@RequestParam("usercode") int code,
+			@RequestParam("username") String id,
+			@RequestParam("password") String password,
+			@RequestParam("email") String email, 
+			@RequestParam("phone") String phone,
+			@RequestParam("nickname") String nickname,
+			@RequestParam("admin") String admin,
+			HttpSession session) {
+		log.info("update 오냐");
+		 Member member = (Member) session.getAttribute("member");
+		 
+		if(member != null){
+		Member eidtMember = Member.builder()
+				.usercode(code)
+				.id(id)
+				.password(password)
+				.email(email)
+				.phone(phone)
+				.nickname(nickname)
+				.admin(admin)
+				.build();		
+			member = service.update(eidtMember);
+		log.info("수정 " + eidtMember.toString());
+		return ResponseEntity.ok(member);
 	}
-
+		return null;
+	}
 	// 회원탈퇴
-	@DeleteMapping("/delete")
+	@DeleteMapping("/delete{code}")
 	public ResponseEntity<Boolean> deleteMember(@PathVariable int code) {
+		
+		Member member = (Member) session.getAttribute("member");
 		try {
 			service.delete(code);
 		} catch (Exception e) {
 			e.printStackTrace();
+			log.info("삭제 성공");
 			return ResponseEntity.ok(false);
 		}
+		log.info("삭제 실패");
 		return ResponseEntity.ok(true);
 	}
 

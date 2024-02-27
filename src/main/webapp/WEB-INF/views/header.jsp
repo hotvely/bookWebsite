@@ -6,26 +6,30 @@
 <meta charset="UTF-8">
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-<!--<script src="/resources/static/javascript/getMember.js"></script>  -->
 
 </head>
 <body>
 
 
 	<script>
+		
 		console.log(`${member}`);
 		const handlerMember = (data) => {
 	        console.log("handlerMember");
-	        member = data;
+	        
 	    };
-	
+	    
+		const handlerBook = (data) => {
+	        console.log("handlerMember");
+	        
+	    };
 	 	const getMember = () => {
 	        try {
 	            $.ajax({
 	                url: "/header",
 	                method: "POST",
 	                success: function (data) {
-	                    // getMember 함수에서 데이터를 처리하는 부분을 handlerMember 함수를 호출하는 것으로 수정
+	            
 	                    handlerMember(data);
 
 	                    if (data.id != null) {
@@ -46,6 +50,26 @@
 	    // 초기 페이지 로딩 시 getMember 함수 호출
 	    getMember();
 
+	    
+	    const getBook = () => {
+	        try {
+	            $.ajax({
+	                url: "/book/show",
+	                method: "POST",
+	                data : {code : 1},
+	                success: function (data) {
+	                  console.log(data);
+	                  handlerBook(data);
+	                }
+	            });
+	        } catch (error) {
+	            console.error("Error: " + error);
+	            throw error;
+	        }
+	    };
+
+	    // 초기 페이지 로딩 시 getMember 함수 호출
+	    getBook();
 	
 
 		
@@ -67,7 +91,8 @@
 	
 	</script>
 
-
+	${book.authority}
+	${member.nickname}
 	<div id="header"></div>
 	
 	<!-- ${member} 서버 세션의 키값과 변수명 같아야함 -->

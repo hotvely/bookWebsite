@@ -11,61 +11,93 @@
 <body>
 	<%@ include file="/WEB-INF/views/header.jsp" %>
 
-	
+	<div>${book.title}</div>
 	<h1>내 정보  ${member.id }</h1>
 	<div id="info"></div>
 	
-	<div class="form-el">
-	아이디 : <input type="text" name="username" id="username" placeholder="아이디를 입력해 주세요" required/> 
-	</div>
+	
 	
 	<div class="form-el">
-	비밀번호 : <input type="text" name = "password" id = "password" placeholder="비밀번호를 입력해 주세요" required/>
+	<input type = "hidden" id = "usercode"  value = "${member.usercode}" />
+	
+	<input type = "hidden" id = username  value = "${member.id}" />
+
+	비밀번호 : <input type="text" name = "password" id = "password" placeholder="변경할 비밀번호를 입력하세요" />
 	</div> 
 	
 	<div class="form-el">
-	이메일 : <input type="text" name="email" id="email" placeholder="이메일을 입력해 주세요" required/>
+	이메일 : <input type="text" name="email" id="email" placeholder="변경할 이메일을 입력하세요" />
 	</div>
 	
 	<div class="form-el">
-	전화번호 : <input type="text" name="phone" id="phone" placeholder="전화 번호를 입력해 주세요" required/>
+	전화번호 : <input type="text" name="phone" id="phone" placeholder="변경할 전화번호를 입력하세요" />
 	</div>
 	
 	<div class="form-el">
-	닉네임 : <input type="text" name="nickname" id="nickname" placeholder="닉네임을 입력해 주세요" required/>
+	닉네임 : <input type="text" name="nickname" id="nickname" placeholder="변경할 닉네임을 입력하세요" />
 	</div>
+	
+		<input type = "hidden" id = "admin"  value = "${member.admin}" />	
 	
 	<br/>
 	
-	<button type="submit" value="정보수정" id=updateProfile>
-		수정
+	<button type="submit" value = "정보수정" id = "updateMember">
+		정보수정
 	</button>
 	
+	<button type="submit"  E"value="회원탈퇴" id="deleteMember">
+    회원탈퇴
+</button>
+	
 	<script>
-		$('#updateProfile').on('click',function(){
-			let member = {
+		$('#updateMember').on('click',function(){
+			let member = {	
+					usercode:$('#usercode').val(),
 					username:$('#username').val(),
 					password:$('#password').val(),
 					email:$('#email').val(),
 					phone:$('#phone').val(),
-					nickname:$('#nickname').val()
+					nickname:$('#nickname').val(),
+					admin:$('#admin').val()
 			};
 			$.ajax({
 				url:'/member/update',
-				type: 'PUT',
-				data: member,
+				type:'PUT',
+				data:member,
 				success: function(response){
 					
 					console.log(response);
-					if(response != null){
-						window.location.href ="/"
-					}
+					alert("정보수정 성공");
+					 if(response != null){
+					window.location.href ="/"
+					} 
 				},
 				error: function(error){
 					console.log('정보수정 에러')
 				}
 			});
 		})
+	</script>
+	
+	<script>
+	$('#deleteMember').on('click',function(){
+	
+		$.ajax({
+			url:'/member/delete' + code,
+			type:'DELETE',
+			success: function(response){
+				
+				console.log(response);
+				alert("회원탙퇴 성공");
+				 if(response != null){
+				window.location.href ="/"
+				} 
+			},
+			error: function(error){
+				console.log('회원탙퇴 에러')
+			}
+		});
+	})
 	</script>
 		
 	<script>
