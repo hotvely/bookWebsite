@@ -11,18 +11,19 @@
 <body>
 
 	<div>
-
 		<div id="image"></div>
-
-
 		<div>
-			<div id="category">분류 :</div>
-			<div id="title">책 제목 :</div>
-			<div id="detail">책 요약 :</div>
-			<div id="authority">글쓴이 :</div>
-			<div id="price">가격 :</div>
-			<div id="date">출간일 :</div>
+			<div>
+				<div id="category">분류 :</div>
+				<div id="title">책 제목 :</div>
+				<div id="detail">책 요약 :</div>
+				<div id="authority">글쓴이 :</div>
+				<div id="price">가격 :</div>
+				<div id="date">출간일 :</div>
+			</div>
+			<div><button>결제하기</button></div>
 		</div>
+
 	</div>
 
 	<script>
