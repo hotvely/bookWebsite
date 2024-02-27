@@ -38,12 +38,12 @@ pageEncoding="UTF-8"%>
 
         <br />
 
-        <button type="submit" value="정보수정" id="updateMember">정보수정</button>
+        <button onclick="updateMember()">정보수정</button>
 
         <button type="submit" value="회원탈퇴" id="deleteMember">회원탈퇴</button>
 
         <script>
-            $("#updateMember").on("click", function () {
+            const updateMember = () => {
                 let member = {
                     usercode: $("#usercode").val(),
                     username: $("#username").val(),
@@ -68,13 +68,14 @@ pageEncoding="UTF-8"%>
                         console.log("정보수정 에러");
                     },
                 });
-            });
+            };
         </script>
 
         <script>
             $("#deleteMember").on("click", function () {
-                const code = $.ajax({
-                    url: "/member/delete" + code,
+                const code = $("#usercode").val();
+                $.ajax({
+                    url: "/member/delete?usercode=" + code,
                     type: "DELETE",
                     success: function (response) {
                         console.log(response);
