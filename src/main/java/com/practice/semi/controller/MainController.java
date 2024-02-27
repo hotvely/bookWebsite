@@ -21,7 +21,7 @@ public class MainController {
 	@GetMapping({ "/", "/main" })
 	public ModelAndView home(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum) {
 		log.info("main page init !! ");
-
+		log.info("" + pageNum);
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("index");
 		mv.addObject("currPage", pageNum);

@@ -76,6 +76,24 @@ public class MemberController {
 		mv.setViewName("/member/loginView");
 		return mv;
 	}
+	
+	// 로그아웃
+	@GetMapping("/logout")
+	public ModelAndView logout(HttpServletRequest request) {
+
+		ModelAndView mv = new ModelAndView();
+			session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();	
+			
+			mv.addObject("logout", session);
+			mv.setViewName("index");
+			mv.addObject("currPage", 1);
+		}
+		log.info("로그아웃");
+		return mv;
+	}
+
 
 	@GetMapping("/myPage")
 	public ModelAndView myPageView() {
@@ -169,16 +187,6 @@ public class MemberController {
 		}
 		return ResponseEntity.ok(false);
 	}
-	// 로그아웃
-	@GetMapping("/logout")
-	public String logout(HttpServletRequest request) {
-
-			session = request.getSession(false);
-		if (session != null) {
-			session.invalidate();
-		}
-		return "index";
-	}
 
 	// 회원수정
 	@PutMapping("/update")
@@ -214,16 +222,16 @@ public class MemberController {
 	@DeleteMapping("/delete{code}")
 	public ResponseEntity<Boolean> deleteMember(@PathVariable int code) {
 		
-		Member member = (Member) session.getAttribute("member");
+//	Member member = (Member) session.getAttribute("member");
 		try {
 			service.delete(code);
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.info("삭제 성공");
-			return ResponseEntity.ok(false);
+			return ResponseEntity.ok(true);
 		}
 		log.info("삭제 실패");
-		return ResponseEntity.ok(true);
+		return ResponseEntity.ok(false);
 	}
 
 }
