@@ -2,7 +2,8 @@
  도서 관리 사이드 세미 프로젝트
 
 
-//의존성 주입 그래들..
+
+#의존성 주입 그래들..
 	dependencies {
  	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
  	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
@@ -23,7 +24,7 @@
 
 
 
-// application.properties
+#application.properties
 //포트번호;
 server.port=9999
 spring.boot.open-in-browser=true
