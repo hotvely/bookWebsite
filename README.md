@@ -26,24 +26,19 @@ testImplementation 'org.springframework.boot:spring-boot-starter-test'
 //포트번호;
 server.port=9999
 spring.boot.open-in-browser=true
-
-# JSP
+// JSP 파일 경로 설정
 spring.mvc.view.prefix=/WEB-INF/views/
 spring.mvc.view.suffix=.jsp
-
-# 인코딩
+// 인코딩 설정
 server.servlet.encoding.charset=UTF-8
 server.servlet.encoding.enabled=true
 server.servlet.encoding.force=true
-
-# 오라클 db사용하기 위해
+// 오라클 db연동하기 위한 정보 설정
 spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 spring.datasource.url=jdbc:oracle:thin:@localhost:1521/xe
 spring.datasource.username=freepets
 spring.datasource.password=freepets
-
-
-# MySQL 데이터베이스 연결 설정
+// MySQL 연동하기 위한 설정 
 spring.datasource.url=jdbc:mysql://localhost:3306/your_database_name?useSSL=false&serverTimezone=UTC
 spring.datasource.username=your_username
 spring.datasource.password=your_password
