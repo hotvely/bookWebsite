@@ -25,7 +25,7 @@
 
 		<div>
 			<span>카테고리</span>
-			<select id=subcategory">
+			<select id="subcategory">
 				<optgroup label="==== 문학">
 					<option value="1">소설</option>
 					<option value="2">수필</option>

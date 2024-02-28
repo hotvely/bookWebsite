@@ -33,4 +33,9 @@ public class BookService {
 		return dao.findAll(pageable);
 	}
 
+	public Book update(Book book) {
+		// TODO 자동 생성된 메소드 스텁
+		return dao.save(book);
+	}
+
 }

@@ -22,6 +22,7 @@
 				<div id="date">출간일 :</div>
 			</div>
 			<div><button onclick="addCart()">장바구니 담기</button></div>
+			<div><a href="/book/update?code=${code}"><button>책 정보 수정하기</button></a></div>
 		</div>
 
 	</div>
@@ -89,10 +90,9 @@
 		 	
 		 	cartItem = [...cartItem, book];
 		 	setCookie('cart', JSON.stringify(cartItem), 60);
-		 	console.log(JSON.parse(getCookie('cart')));
-		 	
-			
+		 	console.log(JSON.parse(getCookie('cart')));			
 		}
+		
 	
 	
 	</script>

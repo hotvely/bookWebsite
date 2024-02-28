@@ -18,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -72,8 +73,10 @@ public class BookController {
 	}
 
 	@GetMapping("/create")
-	public String createView() {
-		return "book/addBook";
+	public ModelAndView createView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("book/addBook");
+		return mv;
 	}
 
 	@GetMapping("/detail")
@@ -81,6 +84,17 @@ public class BookController {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("book/bookDetail");
 		mv.addObject("code", code);
+		return mv;
+	}
+	
+	@GetMapping("/update")
+	public ModelAndView updateView(@RequestParam(name = "code") int code) {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("book/updateBook");
+		
+		Book book = service.show(code);
+		mv.addObject("book", book);
+		
 		return mv;
 	}
 
@@ -104,16 +118,6 @@ public class BookController {
 		if (subcategory == null)
 			subcategory = 0;
 
-		// 날짜 문자열로 받아서 java.util.Date 타입으로 변환해 줘야함.
-//		SimpleDateFormat formatter = new SimpleDateFormat("yyyy-MM-dd");
-//		Date bDate = null;
-//		try {
-//			bDate = formatter.parse(date);
-//			log.info(""+ bDate);
-//		} catch (ParseException e) {
-//			// TODO 자동 생성된 catch 블록
-//			e.printStackTrace();
-//		}
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
@@ -126,6 +130,36 @@ public class BookController {
 //		log.info(book.toString());
 
 		return ResponseEntity.ok(service.create(book));
+	}
+	
+	@PutMapping("/update")
+	public ResponseEntity<Boolean> update(
+			@RequestParam(name = "code") int code,
+			@RequestParam(name = "title") String title,
+			@RequestParam(name = "detail", required = false) String detail,
+			@RequestParam(name = "authority") String authority,
+			@RequestParam(name = "subcategory", required = false) Integer subcategory,
+			@RequestParam(name = "price") int price, @RequestParam(name = "publisher") String publisher,
+			@RequestParam(name = "date", required = false) String date,
+			@RequestParam(name = "image", required = false) String image) {
+		boolean isSucc = false;
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+		// 포맷 적용
+		LocalDate localDate = LocalDate.parse(date, formatter);
+
+		Book book = Book.builder().code(code).title(title).detail(detail).authority(authority)
+				.subcategory(subcategory).price(price).date(localDate).image(image).build();
+		
+		
+		Book uBook = service.update(book);
+		if(uBook != null) {
+			isSucc = true;
+		}
+		
+		
+		return ResponseEntity.ok(isSucc);
 	}
 
 }
