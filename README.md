@@ -9,12 +9,12 @@
 - implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 - implementation 'org.springframework.boot:spring-boot-starter-jdbc'
 - implementation 'org.springframework.boot:spring-boot-starter-web'
-//JSP파일 사용하기 위해 무조건 필요함;
+- //JSP파일 사용하기 위해 무조건 필요함;
 - implementation 'org.apache.tomcat.embed:tomcat-embed-jasper:10.0.17'
 - implementation 'javax.servlet:jstl:1.2'
 - compileOnly 'org.projectlombok:lombok'
 - developmentOnly 'org.springframework.boot:spring-boot-devtools'
-//runtimeOnly 'com.mysql:mysql-connector-j'
+- //runtimeOnly 'com.mysql:mysql-connector-j'
 - runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
 - annotationProcessor 'org.projectlombok:lombok'
 - testImplementation 'org.springframework.boot:spring-boot-starter-test'
