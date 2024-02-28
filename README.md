@@ -38,7 +38,19 @@
 - spring.datasource.url=jdbc:oracle:thin:@localhost:1521/xe
 - spring.datasource.username=freepets
 - spring.datasource.password=freepets
-## MySQL 연동하기 위한 설정 
-- spring.datasource.url=jdbc:mysql://localhost:3306/your_database_name?useSSL=false&serverTimezone=UTC
-- spring.datasource.username=your_username
-- spring.datasource.password=your_password
+## MySQL 연동하기 위한 설정  
+
+# MySQL8
+## Spring DataSource (MySQL)
+- spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
+- spring.datasource.url=jdbc:mysql://localhost:3306/bookWeb?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=UTC
+- spring.datasource.username=root
+- spring.datasource.password=@hwan920620
+
+- spring.jpa.database=mysql
+- spring.jpa.database-platform=org.hibernate.dialect.MySQL8Dialect
+- spring.jpa.hibernate.ddl-auto=none
+- spring.jpa.generate-ddl=false
+- spring.jpa.show-sql=true
+- spring.jpa.properties.hibernate.format_sql=true
+
