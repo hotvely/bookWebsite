@@ -4,7 +4,8 @@
 
 
 #의존성 주입 그래들..
-	dependencies {
+	dependencies 
+ {
  	implementation 'org.springframework.boot:spring-boot-starter-data-jdbc'
  	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
  	implementation 'org.springframework.boot:spring-boot-starter-jdbc'
@@ -20,7 +21,7 @@
  	runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
  	annotationProcessor 'org.projectlombok:lombok'
  	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	}
+}
 
 
 
