@@ -31,6 +31,8 @@
                                 $("#header").append(
                                     '<a href="/member/myPage">마이페이지</a>' +
                                         "<br/>" +
+                                        '<a href="/member/myCart">장바구니</a>' +
+                                        "<br/>" +
                                         '<a href="/member/logout">a태그 로그아웃</a>' +
                                         "<br/>" +
                                         '<button onclick="logout()">로그아웃</button>'
@@ -69,7 +71,7 @@
                 }
             };
 
-            // 초기 페이지 로딩 시 getMember 함수 호출
+            // 초기 페이지 로딩 시 getBook 함수 호출
             getBook();
 
             const logout = () => {

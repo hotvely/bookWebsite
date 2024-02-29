@@ -100,14 +100,11 @@ public class MemberController {
 	@PostMapping("/logout")
 	public boolean logout(HttpServletRequest request) {
 		log.info("logout");
-//		ModelAndView mv = new ModelAndView();
+
 		session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
-//			
-//			mv.addObject("logout", session);
-//			mv.setViewName("index");
-//			mv.addObject("currPage", 1);
+
 			return true;
 		}
 		log.info("로그아웃");
@@ -122,6 +119,15 @@ public class MemberController {
 
 		return mv;
 
+	}
+	
+	@GetMapping("/myCart")
+	public ModelAndView myCartView() {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("/member/myCartView");
+		
+		return mv;
 	}
 
 	// --------------------- page view
