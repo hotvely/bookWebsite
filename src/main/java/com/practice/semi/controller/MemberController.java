@@ -227,7 +227,7 @@ public class MemberController {
 
 		if (member != null) {
 			Member eidtMember = Member.builder()
-					.usercode(code)
+					.code(code)
 					.id(id)
 					.password(password)
 					.email(email)

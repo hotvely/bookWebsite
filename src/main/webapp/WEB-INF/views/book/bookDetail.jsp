@@ -68,8 +68,11 @@
 			let date = new Date();
 			date.setMinutes(date.getMinutes() + min);
 		    // 설정 일수만큼 현재시간에 만료값으로 지정
-		    value = decodeURIComponent(value) + ((min == null) ? '' : ';expires=' + date.toUTCString());
-		    document.cookie = key + '=' + value;
+		    value = decodeURIComponent(value) + ((min == null) ? '' : ';expires=' + date.toUTCString()
+		    +";domain=localhost;path=/");
+		   
+		    document.cookie = `\${key}=\${value}`;
+		    console.log(document.cookie);
 		}
 		
 		
