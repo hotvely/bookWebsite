@@ -15,7 +15,7 @@ pageEncoding="UTF-8"%>
         <div id="info"></div>
 
         <div class="form-el">
-            <input type="hidden" id="usercode" value="${member.usercode}" />
+            <input type="hidden" id="usercode" value="${member.code}" />
 
             <input type="hidden" id="username" value="${member.id}" />
 
@@ -46,7 +46,7 @@ pageEncoding="UTF-8"%>
         <script>
             const updateMember = () => {
                 let member = {
-                    usercode: $("#usercode").val(),
+                    code: $("#usercode").val(),
                     username: $("#username").val(),
                     password: $("#password").val(),
                     email: $("#email").val(),
@@ -76,7 +76,7 @@ pageEncoding="UTF-8"%>
             const deleteMembr = () => {
                 const code = $("#usercode").val();
                 $.ajax({
-                    url: "/member/delete?usercode=" + code,
+                    url: "/member/delete?code=" + code,
                     type: "DELETE",
                     success: function (response) {
                         console.log(response);

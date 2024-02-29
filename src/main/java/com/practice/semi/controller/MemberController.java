@@ -214,7 +214,7 @@ public class MemberController {
 	// 회원수정
 	@PutMapping("/update")
 	public ResponseEntity<Member> update(
-			@RequestParam(name = "usercode") int code,
+			@RequestParam(name = "code") int code,
 			@RequestParam(name = "username") String id, 
 			@RequestParam(name = "password") String password,
 			@RequestParam(name = "email") String email, 
@@ -245,12 +245,9 @@ public class MemberController {
 	// 회원탈퇴
 	@DeleteMapping("/delete")
 	public ResponseEntity<Boolean> deleteMember(
-			@RequestParam(name = "usercode") int code) {
-
-//	Member member = (Member) session.getAttribute("member");
+			@RequestParam(name = "code") int code) {
 		try {
 			service.delete(code);
-//			session.invalidate();
 		} catch (Exception e) {
 			e.printStackTrace();
 			log.info("삭제 시루패");
