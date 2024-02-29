@@ -29,7 +29,7 @@
                 return null;
             };
 
-            // 특정 쿠키 삭제 이제 장바구니에 책이 여러개일때 처리할거 짜야함
+            // 특정 쿠키 삭제
             const deleteCart = (key) => {
                 console.log(key);
                 document.cookie = key + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
@@ -46,9 +46,9 @@
                     document.cookie = cookieName + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
                     console.log(cookieName);
                 }
-
                 location.reload();
             };
+
             const myCart = () => {
                 const cartInfo = JSON.parse(getCookie("cart"));
                 console.log(cartInfo);
@@ -58,7 +58,8 @@
 
                 if (cartInfo != null && cartInfo.length > 0) {
                     for (const item of cartInfo) {
-                        const con = "";
+                        // book의 code로 쿠키찾아서 삭제
+                        const deleteButton = $(`<button onclick="deleteCart('${item.code}')">책 삭제</button>`);
                         cartElement.append(
                             `<img width="100px" alt="xxx" src="${
                                 item.image != null ? item.image : "/images/basic.jpeg"
