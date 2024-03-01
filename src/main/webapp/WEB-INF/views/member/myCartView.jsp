@@ -13,13 +13,11 @@
 
         <div id="cartList"></div>
 
-        <button onclick="deleteCart('cart')">책 삭제</button>
         <button onclick="deleteAllCart()">장바구니 비우기</button>
 
         <script>
             const getCookie = (key) => {
                 const cookies = document.cookie.split(";");
-
                 for (let elem of cookies) {
                     let cookie = elem.trim();
                     if (cookie.startsWith(key + "=")) {
@@ -30,16 +28,22 @@
             };
 
             // 특정 쿠키 삭제
-            const deleteCart = (key) => {
-                console.log(key);
-                document.cookie = key + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+            const deleteCartBook = (code) => {
+                const cartItem = JSON.parse(getCookie("cart") || "[]");
+                console.log(cartItem);
+
+                const filterCartItem = cartItem.filter((item) => {
+                    return item.code !== code;
+                });
+                document.cookie =
+                    "cart=" + encodeURIComponent(JSON.stringify(filterCartItem)) + "; domain=localhost; path=/";
+
                 location.reload();
             };
 
             // 쿠키 전체 삭제
             const deleteAllCart = () => {
                 const cookies = document.cookie.split(";");
-
                 for (const cookie of cookies) {
                     const trimmedCookie = cookie.trim();
                     const cookieName = trimmedCookie.split("=")[0];
@@ -50,7 +54,7 @@
             };
 
             const myCart = () => {
-                const cartInfo = JSON.parse(getCookie("cart"));
+                const cartInfo = JSON.parse(getCookie("cart") || "[]");
                 console.log(cartInfo);
 
                 const cartElement = $("#cartList");
@@ -58,18 +62,21 @@
 
                 if (cartInfo != null && cartInfo.length > 0) {
                     for (const item of cartInfo) {
-                        // book의 code로 쿠키찾아서 삭제
-                        const deleteButton = $(`<button onclick="deleteCart('${item.code}')">책 삭제</button>`);
-                        cartElement.append(
+                        // book의 code로 쿠키찾아서 삭제 는 삭제 안됨
+                        const deleteButton = `<button onclick="deleteCartBook(\${item.code})">책 삭제</button>`;
+
+                        const itemHtml =
                             `<img width="100px" alt="xxx" src="${
                                 item.image != null ? item.image : "/images/basic.jpeg"
                             }"/>` +
-                                `<br/>` +
-                                ` <a href="/book/detail?code=\${item.code}">책 제목: \${item.title}</a>` +
-                                `<br/>` +
-                                `<div>글쓴이: \${item.authority}</div>` +
-                                `<div>가격: \${item.price}</div>`
-                        );
+                            `<br/>` +
+                            ` <a href="/book/detail?code=\${item.code}">책 제목: \${item.title}</a>` +
+                            `<span> \${deleteButton}</span>` +
+                            `<br/>` +
+                            `<div>글쓴이: \${item.authority}</div>` +
+                            `<div>가격: \${item.price}</div>`;
+
+                        cartElement.append(itemHtml);
                     }
                 } else {
                     cartElement.append("<div>장바구니가 비었습니다.</div>");
