@@ -60,17 +60,11 @@
 
 
 
-            const handlerAfterMember = (id) => {
-            	if( id != undefined || id != null){
-            		$('#afterMember').append(id + "님 반갑습니다.");
-            	}
-            }
-
 
             // 로그인시 멤버 정보 가져오는 로직
         </script>
 
-        <div id="afterMember"></div>
+      
         <div id="addBooks"></div>
 
         <a href="/book/create">

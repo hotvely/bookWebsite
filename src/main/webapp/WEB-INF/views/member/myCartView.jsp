@@ -15,16 +15,7 @@
         <div id="cartList"></div>
 
         <script>
-            const getCookie = (key) => {
-                const cookies = document.cookie.split(";");
-                for (let elem of cookies) {
-                    let cookie = elem.trim();
-                    if (cookie.startsWith(key + "=")) {
-                        return decodeURIComponent(cookie.substring(key.length + 1));
-                    }
-                }
-                return null;
-            };
+
 
             // 특정 쿠키 삭제
             const deleteCartBook = (code) => {
