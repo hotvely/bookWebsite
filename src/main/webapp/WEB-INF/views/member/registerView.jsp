@@ -32,9 +32,18 @@
 
         <br />
 
-        <button onclick="register()">가입</button>
+        <button id="registerBtn" onclick="register()">가입</button>
+        <!-- <button onclick="registerAdmin()">관리자 가입</button> -->
 
+        <!-- 일반유저 회원가입 -->
         <script>
+            $(document).ready(function () {
+                // 현재 URL이 /member/register/admin인 경우에만 registerAdmin 버튼을 추가
+                if (window.location.pathname === "/member/register/admin") {
+                    $("body").append('<button id="registerAdminBtn" onclick="registerAdmin()">관리자 가입</button>');
+                    $("#registerBtn").hide();
+                }
+            });
             const register = () => {
                 let member = {
                     username: $("#username").val(),
@@ -57,6 +66,36 @@
                     },
                     error: function (error) {
                         console.log("회원가입 에러");
+                    },
+                });
+            };
+
+            //   <!-- 관리자 회원가입 -->
+
+            const registerAdmin = () => {
+                let member = {
+                    username: $("#username").val(),
+                    password: $("#password").val(),
+                    email: $("#email").val(),
+                    phone: $("#phone").val(),
+                    nickname: $("#nickname").val(),
+                    admin: true,
+                };
+
+                $.ajax({
+                    url: "/member/register/admin",
+                    type: "POST",
+                    data: member,
+                    success: function (response) {
+                        console.log(response);
+                        if (response != null) {
+                            alert("관리자가입 성공");
+                            window.location.href = "/";
+                            console.log(member);
+                        }
+                    },
+                    error: function (error) {
+                        console.log("관리자가입 에러");
                     },
                 });
             };

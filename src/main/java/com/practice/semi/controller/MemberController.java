@@ -64,21 +64,23 @@ public class MemberController {
 		return null;
 
 	}
-
+	// 일반유저
 	@GetMapping("/register")
 	public ModelAndView registerView() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/member/registerView");
+		mv.addObject("admin", false);
 		return mv;
 	}
-	
-	@GetMapping("/registerAdmin")
-	public boolean registerAdmin() {
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("admin", mv);
-		mv.setViewName("/member/registerView");
-		return true;
-	}
+	// 관리자
+	 @GetMapping("/register/admin")
+	    public ModelAndView registerAdminView() {
+	        ModelAndView mv = new ModelAndView();
+	        mv.setViewName("/member/registerView");
+	        mv.addObject("admin", true);
+	        return mv;
+	    }
+
 
 	@GetMapping("/login")
 	public ModelAndView loginView() {
@@ -108,11 +110,9 @@ public class MemberController {
 	@PostMapping("/logout")
 	public boolean logout(HttpServletRequest request) {
 		log.info("logout");
-
 		session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
-
 			return true;
 		}
 		log.info("로그아웃");
@@ -122,11 +122,8 @@ public class MemberController {
 	@GetMapping("/myPage")
 	public ModelAndView myPageView() {
 		ModelAndView mv = new ModelAndView();
-
 		mv.setViewName("/member/myPageView");
-
 		return mv;
-
 	}
 	
 	@GetMapping("/myCart")
@@ -173,13 +170,35 @@ public class MemberController {
 			@RequestParam(name = "password") String password, 
 			@RequestParam(name = "email") String email,
 			@RequestParam(name = "phone") String phone, 
-			@RequestParam(name = "nickname") String nickname) {
+			@RequestParam(name = "nickname") String nickname,
+			@RequestParam(name = "admin", required = false, defaultValue = "false") String admin) {
 		log.info("register");
-		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname)
+		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname).admin(admin)
 				.build();
 		Member registerMember = service.create(member);
-		log.info("가입 " + member.toString());
+		   if (Boolean.parseBoolean(admin)) {
+		        log.info("관리자 가입 " + member.toString());
+		    } else {
+		        log.info("일반 가입 " + member.toString());
+		    }
 		return ResponseEntity.ok(registerMember);
+	}
+
+	// 관리자 회원가입
+	@PostMapping("/register/admin")
+	public ResponseEntity<Member> registerAdmin(
+			@RequestParam(name = "username") String username,
+			@RequestParam(name = "password") String password, 
+			@RequestParam(name = "email") String email,
+			@RequestParam(name = "phone") String phone, 
+			@RequestParam(name = "nickname") String nickname,
+			@RequestParam(name = "admin" )String admin) {
+		log.info("registerAdmin");
+		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname).admin("true")
+				.build();
+		Member registerAdmin = service.create(member);
+		log.info("관리자 가입 " + member.toString());
+		return ResponseEntity.ok(registerAdmin);
 	}
 
 //	@PostMapping("/findPwd")
