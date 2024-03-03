@@ -71,6 +71,14 @@ public class MemberController {
 		mv.setViewName("/member/registerView");
 		return mv;
 	}
+	
+	@GetMapping("/registerAdmin")
+	public boolean registerAdmin() {
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("admin", mv);
+		mv.setViewName("/member/registerView");
+		return true;
+	}
 
 	@GetMapping("/login")
 	public ModelAndView loginView() {

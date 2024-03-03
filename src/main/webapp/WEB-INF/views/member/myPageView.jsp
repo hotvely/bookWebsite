@@ -40,7 +40,6 @@ pageEncoding="UTF-8"%>
 
         <button onclick="updateMember()">정보수정</button>
 
-        <!-- <button type="submit" value="회원탈퇴" id="deleteMember">회원탈퇴</button> -->
         <button onclick="deleteMembr()">회원탈퇴</button>
 
         <script>

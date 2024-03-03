@@ -8,7 +8,9 @@
     </head>
     <body>
         ${book.authority} ${member.nickname}
-        <div id="header"></div>
+        <div id="header">
+            <a href="/">홈으로</a>
+        </div>
         <script>
             console.log(`${member}`);
             const handlerMember = (data) => {
