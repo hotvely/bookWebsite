@@ -1,28 +1,32 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>Insert title here</title>
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    </head>
-    <body>
-        <div>
-            <div id="image"></div>
-            <div>
-                <div>
-                    <div id="category">분류 :</div>
-                    <div id="title">책 제목 :</div>
-                    <div id="detail">책 요약 :</div>
-                    <div id="authority">글쓴이 :</div>
-                    <div id="price">가격 :</div>
-                    <div id="date">출간일 :</div>
-                </div>
-                <div><button onclick="addCart()">장바구니 담기</button></div>
-            </div>
-        </div>
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+	<%@ include file="/WEB-INF/views/header.jsp"%>
 
-        <script>
+	<div>
+		<div id="image"></div>
+		<div>
+			<div>
+				<div id="category">분류 :</div>
+				<div id="title">책 제목 :</div>
+				<div id="detail">책 요약 :</div>
+				<div id="authority">글쓴이 :</div>
+				<div id="price">가격 :</div>
+				<div id="date">출간일 :</div>
+			</div>
+			<div>
+				<button onclick="addCart()">장바구니 담기</button>
+			</div>
+		</div>
+	</div>
+
+	<script>
             let book = null;
 
             $.ajax({
@@ -49,7 +53,7 @@
             	}
             });
 
-            const getCookie = (key) => {
+/*             const getCookie = (key) => {
             	const cookies = document.cookie.split(';');
             	for(let elem of cookies){
             		let cookie = elem.trim();
@@ -69,11 +73,17 @@
 
                 document.cookie = `\${key}=\${value}`;
                 console.log(document.cookie);
-            }
+            } */
 
 
 
             const addCart = () => {
+            	
+            	if(member == null){
+            		alert("로그인이 필요합니다");
+            		return null;
+            	}
+            	
             	let cartItem = [];
              	if(getCookie('cart')!=null){
             		console.log(JSON.parse(getCookie('cart')));
@@ -91,5 +101,5 @@
              	console.log(JSON.parse(getCookie('cart')));
             }
         </script>
-    </body>
+</body>
 </html>

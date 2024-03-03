@@ -5,30 +5,33 @@
         <meta charset="UTF-8" />
         <title>Insert title here</title>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script type="text/javascript" src="/javascript/Cookie.js"></script>
     </head>
+
     <body>
-        ${book.authority} ${member.nickname}
-        <div id="header">
-            <a href="/">홈으로</a>
-        </div>
+        <div id="home"><a href="/">홈</a></div>
+        <div id="header"></div>
+
         <script>
             console.log(`${member}`);
+            let member = null;
+            console.log(getCookie("cart"));
+
             const handlerMember = (data) => {
+                console.log(data);
+                member = data;
+                console.log(member);
                 console.log("handlerMember");
             };
 
-            const handlerBook = (data) => {
-                console.log("handlerMember");
-            };
             const getMember = () => {
                 try {
                     $.ajax({
                         url: "/header",
                         method: "POST",
                         success: function (data) {
-                            handlerMember(data);
-
                             if (data.id != null) {
+                                handlerMember(data);
                                 $("#header").append("지금은 로그인이 되어 있는 상태 입니다<br/>");
                                 $("#header").append(
                                     '<a href="/member/myPage">마이페이지</a>' +
@@ -56,26 +59,6 @@
             // 초기 페이지 로딩 시 getMember 함수 호출
             getMember();
 
-            const getBook = () => {
-                try {
-                    $.ajax({
-                        url: "/book/show",
-                        method: "POST",
-                        data: { code: 1 },
-                        success: function (data) {
-                            console.log(data);
-                            handlerBook(data);
-                        },
-                    });
-                } catch (error) {
-                    console.error("Error: " + error);
-                    throw error;
-                }
-            };
-
-            // 초기 페이지 로딩 시 getBook 함수 호출
-            getBook();
-
             const logout = () => {
                 $.ajax({
                     type: "POST",
@@ -93,6 +76,5 @@
                 });
             };
         </script>
-        <!-- ${member} 서버 세션의 키값과 변수명 같아야함 -->
     </body>
 </html>
