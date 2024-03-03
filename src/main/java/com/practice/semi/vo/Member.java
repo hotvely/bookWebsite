@@ -21,8 +21,7 @@ public class Member {
 	
 	@Id
 	@Column(name = "CODE")
-	@GeneratedValue(strategy = GenerationType.IDENTITY)   
-	private int usercode;
+	private int code;
 	
 	@Column(name = "ID")
 	private String id;

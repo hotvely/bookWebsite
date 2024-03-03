@@ -1,5 +1,7 @@
 package com.practice.semi.controller;
 
+import java.io.IOException;
+import java.net.http.HttpResponse;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,7 @@ import com.practice.semi.vo.Member;
 import com.practice.semi.vo.MemberDTO;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.extern.slf4j.Slf4j;
 
@@ -76,24 +79,37 @@ public class MemberController {
 		mv.setViewName("/member/loginView");
 		return mv;
 	}
-	
-	// 로그아웃
-	@GetMapping("/logout")
-	public ModelAndView logout(HttpServletRequest request) {
 
-		ModelAndView mv = new ModelAndView();
-			session = request.getSession(false);
-		if (session != null) {
-			session.invalidate();	
-			
-			mv.addObject("logout", session);
-			mv.setViewName("index");
-			mv.addObject("currPage", 1);
+	//
+
+	// 로그아웃 a태그 url 매핑해서 서버에서 처리하는 로그아웃 방식 아마 jsp 사용하니까 서버에서 처리하는 걸 선호하지 않으려나 생각 중..
+	@GetMapping("/logout")
+	public void logout2(HttpServletRequest request, HttpServletResponse response) {
+		session = request.getSession(false);
+		try {
+			if (session != null) {
+				session.invalidate();
+				response.sendRedirect("/");
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
-		log.info("로그아웃");
-		return mv;
 	}
 
+	// 로그아웃 button 태그로 ajax 통신 post 요청 후 반환 받고 클라이언트에서 처리하는 로그아웃 방식
+	@PostMapping("/logout")
+	public boolean logout(HttpServletRequest request) {
+		log.info("logout");
+
+		session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+
+			return true;
+		}
+		log.info("로그아웃");
+		return false;
+	}
 
 	@GetMapping("/myPage")
 	public ModelAndView myPageView() {
@@ -103,6 +119,15 @@ public class MemberController {
 
 		return mv;
 
+	}
+	
+	@GetMapping("/myCart")
+	public ModelAndView myCartView() {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("/member/myCartView");
+		
+		return mv;
 	}
 
 	// --------------------- page view
@@ -136,18 +161,13 @@ public class MemberController {
 	// 회원가입
 	@PostMapping("/register")
 	public ResponseEntity<Member> register(
-			@RequestParam("username")String username,
-			@RequestParam("password")String password,
-			@RequestParam("email") String email,
-			@RequestParam("phone") String phone,
-			@RequestParam("nickname") String nickname) {
+			@RequestParam(name = "username") String username,
+			@RequestParam(name = "password") String password, 
+			@RequestParam(name = "email") String email,
+			@RequestParam(name = "phone") String phone, 
+			@RequestParam(name = "nickname") String nickname) {
 		log.info("register");
-		Member member = Member.builder()
-				.id(username)
-				.password(password)
-				.email(email)
-				.phone(phone)
-				.nickname(nickname)
+		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname)
 				.build();
 		Member registerMember = service.create(member);
 		log.info("가입 " + member.toString());
@@ -162,7 +182,9 @@ public class MemberController {
 //	
 	// 비밀번호 찾기
 	@PostMapping("/findPwd")
-	public ResponseEntity<String> findPwd(@RequestParam("username") String id, @RequestParam("email") String email) {
+	public ResponseEntity<String> findPwd(
+			@RequestParam(name = "username") String id,
+			@RequestParam(name = "email") String email) {
 		String pwd = service.findPwd(id, email);
 		return ResponseEntity.ok(pwd);
 	}
@@ -170,8 +192,9 @@ public class MemberController {
 	// 로그인
 	// 세션 생성 후 저장
 	@PostMapping("/login")
-	public ResponseEntity<Boolean> login(@RequestParam("username") String id, 
-			@RequestParam("password") String password,
+	public ResponseEntity<Boolean> login(
+			@RequestParam(name = "username") String id,
+			@RequestParam(name = "password") String password,
 			HttpServletRequest request) {
 		log.info("로그인 성공하냐");
 		Member member = service.loginMember(id, password);
@@ -191,47 +214,47 @@ public class MemberController {
 	// 회원수정
 	@PutMapping("/update")
 	public ResponseEntity<Member> update(
-			@RequestParam("usercode") int code,
-			@RequestParam("username") String id,
-			@RequestParam("password") String password,
-			@RequestParam("email") String email, 
-			@RequestParam("phone") String phone,
-			@RequestParam("nickname") String nickname,
-			@RequestParam("admin") String admin,
+			@RequestParam(name = "code") int code,
+			@RequestParam(name = "username") String id, 
+			@RequestParam(name = "password") String password,
+			@RequestParam(name = "email") String email, 
+			@RequestParam(name = "phone") String phone,
+			@RequestParam(name = "nickname") String nickname, 
+			@RequestParam(name = "admin") String admin,
 			HttpSession session) {
 		log.info("update 오냐");
-		 Member member = (Member) session.getAttribute("member");
-		 
-		if(member != null){
-		Member eidtMember = Member.builder()
-				.usercode(code)
-				.id(id)
-				.password(password)
-				.email(email)
-				.phone(phone)
-				.nickname(nickname)
-				.admin(admin)
-				.build();		
+		Member member = (Member) session.getAttribute("member");
+
+		if (member != null) {
+			Member eidtMember = Member.builder()
+					.code(code)
+					.id(id)
+					.password(password)
+					.email(email)
+					.phone(phone)
+					.nickname(nickname)
+					.admin(admin)
+					.build();
 			member = service.update(eidtMember);
-		log.info("수정 " + eidtMember.toString());
-		return ResponseEntity.ok(member);
-	}
+			log.info("수정 " + eidtMember.toString());
+			return ResponseEntity.ok(member);
+		}
 		return null;
 	}
+
 	// 회원탈퇴
-	@DeleteMapping("/delete{code}")
-	public ResponseEntity<Boolean> deleteMember(@PathVariable int code) {
-		
-//	Member member = (Member) session.getAttribute("member");
+	@DeleteMapping("/delete")
+	public ResponseEntity<Boolean> deleteMember(
+			@RequestParam(name = "code") int code) {
 		try {
 			service.delete(code);
 		} catch (Exception e) {
 			e.printStackTrace();
-			log.info("삭제 성공");
-			return ResponseEntity.ok(true);
+			log.info("삭제 시루패");
+			return ResponseEntity.ok(false);
 		}
-		log.info("삭제 실패");
-		return ResponseEntity.ok(false);
+		log.info("삭제 성공");
+		return ResponseEntity.ok(true);
 	}
 
 }

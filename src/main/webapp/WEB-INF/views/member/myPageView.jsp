@@ -15,7 +15,7 @@ pageEncoding="UTF-8"%>
         <div id="info"></div>
 
         <div class="form-el">
-            <input type="hidden" id="usercode" value="${member.usercode}" />
+            <input type="hidden" id="usercode" value="${member.code}" />
 
             <input type="hidden" id="username" value="${member.id}" />
 
@@ -38,14 +38,15 @@ pageEncoding="UTF-8"%>
 
         <br />
 
-        <button type="submit" value="정보수정" id="updateMember">정보수정</button>
+        <button onclick="updateMember()">정보수정</button>
 
-        <button type="submit" value="회원탈퇴" id="deleteMember">회원탈퇴</button>
+        <!-- <button type="submit" value="회원탈퇴" id="deleteMember">회원탈퇴</button> -->
+        <button onclick="deleteMembr()">회원탈퇴</button>
 
         <script>
-            $("#updateMember").on("click", function () {
+            const updateMember = () => {
                 let member = {
-                    usercode: $("#usercode").val(),
+                    code: $("#usercode").val(),
                     username: $("#username").val(),
                     password: $("#password").val(),
                     email: $("#email").val(),
@@ -68,13 +69,14 @@ pageEncoding="UTF-8"%>
                         console.log("정보수정 에러");
                     },
                 });
-            });
+            };
         </script>
 
         <script>
-            $("#deleteMember").on("click", function () {
-                const code = $.ajax({
-                    url: "/member/delete" + code,
+            const deleteMembr = () => {
+                const code = $("#usercode").val();
+                $.ajax({
+                    url: "/member/delete?code=" + code,
                     type: "DELETE",
                     success: function (response) {
                         console.log(response);
@@ -87,7 +89,8 @@ pageEncoding="UTF-8"%>
                         console.log("회원탙퇴 에러");
                     },
                 });
-            });
+            };
+            // $("#deleteMember").on("click", function () {});
         </script>
 
         <script>

@@ -67,7 +67,7 @@ public class MemberService {
 	}
 	
 	public Member update(Member vo) {
-		Member member = dao.findById(vo.getUsercode()).orElse(null);
+		Member member = dao.findById(vo.getCode()).orElse(null);
 			if(member != null) {	
 				log.info("업데이트 서비스 : " + vo);
 				return dao.save(vo);
