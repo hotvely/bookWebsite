@@ -21,5 +21,4 @@ const setCookie = (key, value, min) => {
 		+ ";domain=localhost;path=/");
 
 	document.cookie = `${key}=${value}`;
-	console.log(document.cookie);
 }

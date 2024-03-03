@@ -13,28 +13,20 @@
 	<div id="header"></div>
 	
 	<script>
-    console.log(`${member}`);
     let member = null;
+    console.log(member);
    console.log(getCookie('cart'));
     
     
-    const handlerMember = (data) => {
-    	console.log(data);
-    	member = data;
-    	console.log(member);
-        console.log("handlerMember");
-    };
 
     const getMember = () => {
         try {
-            $.ajax({
+            const ajaxMember = $.ajax({
                 url: "/header",
                 method: "POST",
                 success: function (data) {
-                   
-
                     if (data.id != null) {
-                    	 handlerMember(data);
+                    	member = data;
                         $("#header").append("지금은 로그인이 되어 있는 상태 입니다<br/>");
                         $("#header").append(
                             '<a href="/member/myPage">마이페이지</a>' +
@@ -61,7 +53,6 @@
 
     // 초기 페이지 로딩 시 getMember 함수 호출
     getMember();
-
 
     const logout = () => {
         $.ajax({
