@@ -2,16 +2,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<meta charset="UTF-8"/>
-	<title>Insert title here</title>
-	<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-	<script type="text/javascript" src="/javascript/Cookie.js"></script>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script type="text/javascript" src="/javascript/Cookie.js"></script>
 </head>
 
 <body>
-	<div id="home"><a href="/">홈</a></div>
+	<div id="home">
+		<a href="/">홈</a>
+	</div>
 	<div id="header"></div>
-	
+	<div id="category"></div>
+	<div id="subcategory"></div>
+
 	<script>
     let member = null;
     console.log(member);
@@ -70,6 +74,48 @@
             },
         });
     };		
+    
+    const getCategory = () => {
+        $.ajax({
+            type: "GET",
+            url: "/category/category",
+            success: function (response) {
+                if (response) {
+                	for(let data of response){
+                		console.log(data);
+                 		$('#category').append(data.category);
+                 	}
+                }	
+              },
+            error: function () {
+               
+            },
+        });
+    };		
+    
+    
+    const getSubCategory = () => {
+        $.ajax({
+            type: "GET",
+            url: "/category/subCategory",
+            success: function (response) {
+                if (response) {
+                	for(let data of response){
+                		console.log(data);
+                 		$('#subcategory').append(data.subcategory);
+                 	}
+                }
+              
+            },
+            error: function () {
+            
+            },
+        });
+    };		
+    
+    getCategory();
+    getSubCategory();
+    
     </script>
 </body>
 </html>

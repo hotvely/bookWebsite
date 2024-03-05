@@ -38,4 +38,9 @@ public class BookService {
 		return dao.save(book);
 	}
 
+	public Page<Book> showAllCategory(Pageable pageable, int category) {
+		// TODO 자동 생성된 메소드 스텁
+		return dao.findByCategory(pageable, category);
+	}
+
 }

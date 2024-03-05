@@ -36,22 +36,16 @@ public class BookController {
 
 	@Autowired
 	BookService service;
+
 	@GetMapping("/showAll")
-	public ResponseEntity<Paging> showAll(
-			@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
-			@RequestParam(name = "sortNum", defaultValue = "1") int sortNum,
-			Model model) {
+	public ResponseEntity<Paging> showAll(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum) {
 
 		// 정렬방법에 따라 Sort 객체 넘겨줄거임..
 		Sort sort = null;
-		switch (sortNum) {
-		case 1:
-			// DB에 입력된 순서를 기반으로 역순 정렬 (최신순)
-			sort = Sort.by("code").descending();
-			break;
-		}
-		
-		log.info("pageNum : " + pageNum + "  sortNum : " + sortNum);
+
+		sort = Sort.by("code").descending();
+
+		log.info("pageNum : " + pageNum);
 
 		Pageable pageable = (Pageable) PageRequest.of(pageNum - 1, 4, sort);
 		Page<Book> result = service.showAll(pageable);
@@ -63,12 +57,49 @@ public class BookController {
 		paging.setCurrPage(result.getNumber());
 		paging.setHasNext(result.hasNext());
 		paging.setHasPrev(result.hasPrevious());
-		
-		
+
 //		
 //		
 //		List<Book> list = service.showAll();
 //		log.info(list.toString());
+		return ResponseEntity.ok(paging);
+	}
+
+	@GetMapping("/showAll/subCategory")
+	public ResponseEntity<Paging> showAllCategory(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(name = "sortNum", defaultValue = "1") int sortNum,
+			@RequestParam(name = "subCategoryNum") int subCategory) {
+		Sort sort = null;
+		switch (sortNum) {
+		case 1:
+			// 등록순 정렬
+			sort = Sort.by("code").descending();
+			break;
+			
+		case 2:
+			// 최신순 정렬
+			sort = Sort.by("date").descending();
+			break;
+			
+		case 3:
+			// 가격순 정렬
+			sort = Sort.by("price").descending();
+			break;
+
+		}
+		
+
+		Pageable pageable = (Pageable) PageRequest.of(pageNum - 1, 10, sort);
+		Page<Book> result = service.showAllCategory(pageable, subCategory);
+		Paging paging = new Paging();
+		paging.setBookList(result.getContent());
+		paging.setTotalCount(result.getTotalElements());
+		paging.setTotalPages(result.getTotalPages());
+		paging.setFirst(result.isFirst());
+		paging.setCurrPage(result.getNumber());
+		paging.setHasNext(result.hasNext());
+		paging.setHasPrev(result.hasPrevious());
+
 		return ResponseEntity.ok(paging);
 	}
 
@@ -86,15 +117,15 @@ public class BookController {
 		mv.addObject("code", code);
 		return mv;
 	}
-	
+
 	@GetMapping("/update")
 	public ModelAndView updateView(@RequestParam(name = "code") int code) {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("book/updateBook");
-		
+
 		Book book = service.show(code);
 		mv.addObject("book", book);
-		
+
 		return mv;
 	}
 
@@ -118,7 +149,6 @@ public class BookController {
 		if (subcategory == null)
 			subcategory = 0;
 
-
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 		// 포맷 적용
@@ -131,34 +161,30 @@ public class BookController {
 
 		return ResponseEntity.ok(service.create(book));
 	}
-	
+
 	@PutMapping("/update")
-	public ResponseEntity<Boolean> update(
-			@RequestParam(name = "code") int code,
-			@RequestParam(name = "title") String title,
-			@RequestParam(name = "detail", required = false) String detail,
+	public ResponseEntity<Boolean> update(@RequestParam(name = "code") int code,
+			@RequestParam(name = "title") String title, @RequestParam(name = "detail", required = false) String detail,
 			@RequestParam(name = "authority") String authority,
 			@RequestParam(name = "subcategory", required = false) Integer subcategory,
 			@RequestParam(name = "price") int price, @RequestParam(name = "publisher") String publisher,
 			@RequestParam(name = "date", required = false) String date,
 			@RequestParam(name = "image", required = false) String image) {
 		boolean isSucc = false;
-		
+
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
 		// 포맷 적용
 		LocalDate localDate = LocalDate.parse(date, formatter);
 
-		Book book = Book.builder().code(code).title(title).detail(detail).authority(authority)
-				.subcategory(subcategory).price(price).date(localDate).image(image).build();
-		
-		
+		Book book = Book.builder().code(code).title(title).detail(detail).authority(authority).subcategory(subcategory)
+				.price(price).date(localDate).image(image).build();
+
 		Book uBook = service.update(book);
-		if(uBook != null) {
+		if (uBook != null) {
 			isSucc = true;
 		}
-		
-		
+
 		return ResponseEntity.ok(isSucc);
 	}
 
