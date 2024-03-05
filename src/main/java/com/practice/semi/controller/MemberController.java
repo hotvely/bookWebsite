@@ -262,8 +262,11 @@ public class MemberController {
 					.nickname(nickname)
 					.admin(admin)
 					.build();
-			member = service.update(eidtMember);
-			log.info("수정 " + eidtMember.toString());
+			member = service.update(eidtMember);			
+			session.setAttribute("member", member);
+			
+			log.info("멤버" + member);
+			
 			return ResponseEntity.ok(member);
 		}
 		return null;

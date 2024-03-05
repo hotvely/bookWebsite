@@ -83,10 +83,6 @@ pageEncoding="UTF-8"%>
                         alert("정보수정 성공");
                         if (response != null) {
                             modal.style.display = "none";
-                            // $("#email").val(response.email);
-                            // $("#phone").val(response.phone);
-                            // $("#nickname").val(response.nickname);
-                            // updatePage(response);
                             window.location.href = "/";
                         }
                     },
@@ -95,12 +91,6 @@ pageEncoding="UTF-8"%>
                     },
                 });
             };
-            // const updatePage = (response) => {
-            //     $("#email").text("이메일 : " + response.email);
-            //     $("#phone").text("전화번호 : " + response.phone);
-            //     $("#nickname").text("닉네임 : " + response.nickname);
-            //     location.reload(true);
-            // };
 
             const deleteMembr = () => {
                 const code = $("#usercode").val();
