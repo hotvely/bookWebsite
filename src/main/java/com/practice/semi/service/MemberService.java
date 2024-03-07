@@ -39,6 +39,17 @@ public class MemberService {
 		return null;
 	}
 	
+	// 아이디 중복 방지를 위한 아이디 찾기
+	public Member idCheck(String id) {
+		return dao.findByStringId(id);
+	};
+	
+	 // 닉네임 중복 방지를 위한 닉네임 찾기
+	public Member nickCheck(String nickname) {
+		return dao.findByNickName(nickname);	  
+		} 
+	
+	
 	public List<Member> showAll(){
 		return dao.findAll();
 	}
@@ -52,15 +63,7 @@ public class MemberService {
 		 return null;
 	    } 
 	
-	public Member findByNickname(String nickname) {
-		Member member = dao.findByNickName(nickname);
-	    if(member != null) {
-	    	return member;
-		 }
-		 log.info("닉네임으로 조회한 계정이 없을시 ");
-		 return null;
-		} 
-	
+
 	public Member create(Member vo) {
 		log.info("member create: " + vo);
 		return dao.save(vo);
