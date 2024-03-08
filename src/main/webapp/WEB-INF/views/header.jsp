@@ -13,9 +13,7 @@
         <div id="header"></div>
 
         <script>
-            console.log(`${member}`);
             let member = null;
-            console.log(getCookie("cart"));
 
             const handlerMember = (data) => {
                 console.log(data);
