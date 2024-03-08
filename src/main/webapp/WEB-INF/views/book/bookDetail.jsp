@@ -1,13 +1,13 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-<head>
-<meta charset="UTF-8" />
-<title>Insert title here</title>
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-</head>
-<body>
-	<%@ include file="/WEB-INF/views/header.jsp"%>
+    <head>
+        <meta charset="UTF-8" />
+        <title>Insert title here</title>
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+    </head>
+    <body>
+        <%@ include file="/WEB-INF/views/header.jsp"%>
 
 	<div>
 		<div id="image"></div>
@@ -27,59 +27,58 @@
 		</div>
 	</div>
 
-	<script>
-            let book = null;
+        <script>
+                        let book = null;
 
-            $.ajax({
-            	url:"/book/show?code="+${code},
-            	method: "POST",
-            	data : {code : ${code}},
-            	success: function(data) {
-            		book = data;
-            		if(book != null){
-            			$('#category').html("분류 : " + book.subcategory);
-            			$('#title').html("제목 : " + book.title);
-            			$('#detail').html("책 요약 : " + book.detail);
-            			$('#authority').html("글쓴이 : " + book.authority);
-            			$('#price').html("가격 : " + book.price);
-            			$('#date').html("출간일 : " + book.date);
+                        $.ajax({
+                        	url:"/book/show?code="+${code},
+                        	method: "POST",
+                        	data : {code : ${code}},
+                        	success: function(data) {
+                        		book = data;
+                        		if(book != null){
+                        			$('#category').html("분류 : " + book.subcategory);
+                        			$('#title').html("제목 : " + book.title);
+                        			$('#detail').html("책 요약 : " + book.detail);
+                        			$('#authority').html("글쓴이 : " + book.authority);
+                        			$('#price').html("가격 : " + book.price);
+                        			$('#date').html("출간일 : " + book.date);
 
-            			if(book.image != null){
-            				$('#image').append("<img src=" +book.image+ "/>");
-            			}
-            			else{
-            				$('#image').append('<img src="/images/basic.jpeg"/>');
-            			}
-            		}
-            	}
-            });
+                        			if(book.image != null){
+                        				$('#image').append("<img src=" +book.image+ "/>");
+                        			}
+                        			else{
+                        				$('#image').append('<img src="/images/basic.jpeg"/>');
+                        			}
+                        		}
+                        	}
+                        });
 
 
-            const addCart = () => {
-            	
-            	if(member == null){
-            		alert("로그인이 필요합니다");
-            		return null;
-            	}
-            	
-            	let cartItem = [];
-             	if(getCookie('cart')!=null){
-            		console.log(JSON.parse(getCookie('cart')));
-            		cartItem = [...JSON.parse(getCookie('cart'))];
-             	}
-             	for(let elem of cartItem){
-             		if(elem.code == book.code){
-             			console.log("같은 아이템 있음;;");
-             			return null;
-             		}
-             	}
+                        const addCart = () => {
+if(member == null){
+                        		alert("로그인이 필요합니다");
+                        		return null;
+                        	}
 
-             	cartItem = [...cartItem, book];
-             	setCookie('cart', JSON.stringify(cartItem), 60);
-             	console.log(JSON.parse(getCookie('cart')));
-            }
-            
-            const checkAdmin = () => {
+                        	let cartItem = [];
+                         	if(getCookie('cart')!=null){
+                        		console.log(JSON.parse(getCookie('cart')));
+                        		cartItem = [...JSON.parse(getCookie('cart'))];
+                         	}
+                         	for(let elem of cartItem){
+                         		if(elem.code == book.code){
+                         			console.log("같은 아이템 있음;;");
+                         			return null;
+                         		}
+                         	}
+            				book = {...book, count : 1};
+                         	cartItem = [...cartItem, book];
+                         	setCookie('cart', JSON.stringify(cartItem), 60);
+                         	console.log(JSON.parse(getCookie('cart')));
+                        }
+
+						 const checkAdmin = () => {
             	console.log(member);
             	if(`${member.id}` != "") //어드민지 나중에 추가해야함.  )
             	{
@@ -93,5 +92,5 @@
             }
             checkAdmin();
         </script>
-</body>
+    </body>
 </html>

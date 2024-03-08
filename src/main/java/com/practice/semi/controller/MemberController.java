@@ -36,41 +36,22 @@ public class MemberController {
 	HttpSession session = null;
 	// --------------------- page view
 
-	@GetMapping("/")
-	public ModelAndView showAll(Model model) {
-		List<Member> members = service.showAll();
-		model.addAttribute("members", members);
-
-		ModelAndView mv = new ModelAndView();
-		mv.addObject("mlist", members);
-		mv.setViewName("/member/adminView");
-		return mv;
-	}
-
-	// 상세 조회
-	@GetMapping("/show/{code}")
-	public ModelAndView show(Model model, @RequestParam("code") int code) {
-
-		Member member = service.show(code);
-
-		if (member != null) {
-			model.addAttribute("member", member);
-
-			ModelAndView mv = new ModelAndView();
-			mv.addObject("showMember", member);
-			mv.setViewName("/member/adminView");
-			return mv;
-		}
-		return null;
-
-	}
-
+	// 일반유저
 	@GetMapping("/register")
 	public ModelAndView registerView() {
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/member/registerView");
+		mv.addObject("admin", false);
 		return mv;
 	}
+	// 관리자
+	 @GetMapping("/register/admin")
+	    public ModelAndView registerAdminView() {
+	        ModelAndView mv = new ModelAndView();
+	        mv.setViewName("/member/registerView");
+	        mv.addObject("admin", true);
+	        return mv;
+	    }
 
 	@GetMapping("/login")
 	public ModelAndView loginView() {
@@ -79,8 +60,6 @@ public class MemberController {
 		mv.setViewName("/member/loginView");
 		return mv;
 	}
-
-	//
 
 	// 로그아웃 a태그 url 매핑해서 서버에서 처리하는 로그아웃 방식 아마 jsp 사용하니까 서버에서 처리하는 걸 선호하지 않으려나 생각 중..
 	@GetMapping("/logout")
@@ -100,11 +79,9 @@ public class MemberController {
 	@PostMapping("/logout")
 	public boolean logout(HttpServletRequest request) {
 		log.info("logout");
-
 		session = request.getSession(false);
 		if (session != null) {
 			session.invalidate();
-
 			return true;
 		}
 		log.info("로그아웃");
@@ -114,11 +91,8 @@ public class MemberController {
 	@GetMapping("/myPage")
 	public ModelAndView myPageView() {
 		ModelAndView mv = new ModelAndView();
-
 		mv.setViewName("/member/myPageView");
-
 		return mv;
-
 	}
 	
 	@GetMapping("/myCart")
@@ -165,15 +139,66 @@ public class MemberController {
 			@RequestParam(name = "password") String password, 
 			@RequestParam(name = "email") String email,
 			@RequestParam(name = "phone") String phone, 
-			@RequestParam(name = "nickname") String nickname) {
+			@RequestParam(name = "nickname") String nickname,
+			@RequestParam(name = "admin", required = false, defaultValue = "false") String admin) {
 		log.info("register");
-		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname)
+			
+		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname).admin(admin)
 				.build();
 		Member registerMember = service.create(member);
-		log.info("가입 " + member.toString());
 		return ResponseEntity.ok(registerMember);
 	}
+	
+	// 관리자 회원가입
+	@PostMapping("/register/admin")
+	public ResponseEntity<Member> registerAdmin(
+			@RequestParam(name = "username") String username,
+			@RequestParam(name = "password") String password, 
+			@RequestParam(name = "email") String email,
+			@RequestParam(name = "phone") String phone, 
+			@RequestParam(name = "nickname") String nickname,
+			@RequestParam(name = "admin" )String admin) {
+		log.info("registerAdmin");
+		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname).admin("true")
+				.build();
+		Member registerAdmin = service.create(member);
+		log.info("관리자 가입 " + member.toString());
+		return ResponseEntity.ok(registerAdmin);
+	}
 
+	// 아이디 중복 체크
+	@GetMapping("/idCheck")
+	public ResponseEntity<Boolean>idCheck(@RequestParam(name = "username") String username){
+		Member member = service.idCheck(username);
+		log.info("중복방지 들어오냐");
+		if(member == null) {
+			// 아이디 중복 아닐때
+			log.info("아이디 중복아님" + username);
+		return ResponseEntity.ok(true);
+		
+		}else {
+			// 아이디 중복일때
+			log.info("아이디 중복" + username);
+			return ResponseEntity.ok(false);
+		}	
+	};
+	
+	// 닉네임 중복 체크
+	@GetMapping("/nickCheck")
+	public ResponseEntity<Boolean>nickCheck(@RequestParam(name = "nickname") String nickname){
+		Member member = service.nickCheck(nickname);
+
+		if(member == null) {
+			// 닉네임 중복 아닐때
+			log.info("닉네임 중복아님" + nickname);
+			return ResponseEntity.ok(true);
+		}else {
+			// 닉네임 중복일때
+			log.info("닉네임 중복" + nickname);
+			return ResponseEntity.ok(false);
+		}		
+	};
+	
 //	@PostMapping("/findPwd")
 //	public ResponseEntity<String> findPwd(@RequestBody MemberDTO dto) {
 //		String pwd = service.findPwd(dto);
@@ -235,8 +260,11 @@ public class MemberController {
 					.nickname(nickname)
 					.admin(admin)
 					.build();
-			member = service.update(eidtMember);
-			log.info("수정 " + eidtMember.toString());
+			member = service.update(eidtMember);			
+			session.setAttribute("member", member);
+			
+			log.info("멤버" + member);
+			
 			return ResponseEntity.ok(member);
 		}
 		return null;
@@ -256,5 +284,32 @@ public class MemberController {
 		log.info("삭제 성공");
 		return ResponseEntity.ok(true);
 	}
+	
+	@GetMapping("/")
+	public ModelAndView showAll(Model model) {
+		List<Member> members = service.showAll();
+		model.addAttribute("members", members);
 
+		ModelAndView mv = new ModelAndView();
+		mv.addObject("mlist", members);
+		mv.setViewName("/member/adminView");
+		return mv;
+	}
+
+	// 상세 조회
+	@GetMapping("/show/{code}")
+	public ModelAndView show(Model model, @RequestParam("code") int code) {
+
+		Member member = service.show(code);
+
+		if (member != null) {
+			model.addAttribute("member", member);
+
+			ModelAndView mv = new ModelAndView();
+			mv.addObject("showMember", member);
+			mv.setViewName("/member/adminView");
+			return mv;
+		}
+		return null;
+	}
 }

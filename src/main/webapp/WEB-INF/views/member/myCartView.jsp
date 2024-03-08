@@ -15,11 +15,11 @@
         <div id="cartList"></div>
 
         <script>
-
+            let bookCount = 1;
 
             // 특정 쿠키 삭제
             const deleteCartBook = (code) => {
-                const cartItem = JSON.parse(getCookie("cart") || "[]");
+                const cartItem = JSON.parse(getCookie("cart"));
                 console.log(cartItem);
 
                 const filterCartItem = cartItem.filter((item) => {
@@ -27,7 +27,6 @@
                 });
                 document.cookie =
                     "cart=" + encodeURIComponent(JSON.stringify(filterCartItem)) + "; domain=localhost; path=/";
-
                 location.reload();
             };
 
@@ -43,16 +42,17 @@
                 location.reload();
             };
 
+            const countHandler = (count) => {};
+
             const myCart = () => {
-                const cartInfo = JSON.parse(getCookie("cart") || "[]");
+                const cartInfo = JSON.parse(getCookie("cart"));
                 console.log(cartInfo);
 
                 const cartElement = $("#cartList");
-                console.log(cartElement);
 
                 if (cartInfo != null && cartInfo.length > 0) {
                     for (const item of cartInfo) {
-                        // book의 code로 쿠키찾아서 삭제 는 삭제 안됨
+                        // code로 쿠키찾아서 삭제
                         const deleteButton = `<button onclick="deleteCartBook(\${item.code})">책 삭제</button>`;
 
                         const itemHtml =
@@ -64,8 +64,10 @@
                             `<span> \${deleteButton}</span>` +
                             `<br/>` +
                             `<div>글쓴이: \${item.authority}</div>` +
-                            `<div>가격: \${item.price}</div>`;
-
+                            `<div>가격: \${item.price}</div>` +
+                            `<div>수량: <button name="minus" onclick="updateCart('\${item.code}')">-</button>` +
+                            `\${bookCount}` +
+                            ` <button name="plus" onclick="updateCart('\${item.code}')">+</button></div>`;
                         cartElement.append(itemHtml);
                     }
                 } else {
@@ -73,6 +75,43 @@
                 }
             };
             myCart();
+
+            const updateCart = (code, action) => {
+                const cartItems = JSON.parse(getCookie("cart"));
+                const findCartItems = cartItems.find((item) => item.code == code);
+                if (findCartItems) {
+                    if (action === "plus") {
+                        // html 값 변경 갯수 수량 가격
+                        //
+                        findCartItems.bookCount = findCartItems.bookCount + 1;
+                    } else if (action === "minus") {
+                        findCartItems.bookCount = findCartItems.bookCount - 1;
+                    }
+                    document.cookie = "cart=" + encodeURIComponent(JSON.stringify(cartItems));
+                }
+            };
+
+            // const updateCart = (code, action) => {
+            //     const cartItems = JSON.parse(getCookie("cart"));
+            //     console.log(cartItems);
+            //     const itemIndex = cartItems.findIndex((item) => item.code === code);
+            //     if (itemIndex !== -1) {
+            //         cartItems[itemIndex].count = cartItems[itemIndex].count || 1;
+            //         console.log(cartItems[itemIndex].count);
+            //         if (action === "plus") {
+            //             cartItems[itemIndex].count += 1;
+            //             console.log("더하기 : " + cartItems[itemIndex].count);
+            //         } else if (action === "minus") {
+            //             cartItems[itemIndex].count -= 1;
+            //             console.log("빼기 : " + cartItems[itemIndex].count);
+            //             if (cartItems[itemIndex].count < 1) {
+            //                 cartItems.splice(itemIndex, 1);
+            //             }
+            //         }
+            //     }
+            //     document.cookie =
+            //         "cart=" + encodeURIComponent(JSON.stringify(cartItems)) + "; domain=localhost; path=/";
+            // };
         </script>
     </body>
 </html>
