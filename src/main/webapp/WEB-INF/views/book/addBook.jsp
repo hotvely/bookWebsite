@@ -7,6 +7,9 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 </head>
 <body>
+
+	<%@ include file="/WEB-INF/views/header.jsp"%>
+	
 	관리자용 책 추가
 	<div>
 		<div>
@@ -25,17 +28,7 @@
 
 		<div>
 			<span>카테고리</span>
-			<select id="subcategory">
-				<optgroup label="==== 문학">
-					<option value="1">소설</option>
-					<option value="2">수필</option>
-					<option value="51">만화</option>
-				</optgroup>
-				<optgroup label="==== 학습">
-					<option value="4">이공계열 전문서적</option>
-					<option value="5">어문계열 전문서적</option>
-					<option value="6">고등학교</option>
-				</optgroup>
+			<select id="categoryOpt">
 			</select>
 		</div>
 
@@ -73,7 +66,7 @@
 				title : $('#title').val(),
 				detail : $('#detail').val(),
 				authority : $('#authority').val(),
-				subcategory : $('#subcategory').val(),
+				subcategory : $('#categoryOpt').val(),
 				price : parseInt($('#price').val()),
 				publisher : $('#publisher').val(),
 				date : $('#date').val() == "" ? null : $('#date').val(),
@@ -95,12 +88,52 @@
 				error: function(error)
 				{
 					
-				}
-				
-			
+				}			
 			});
 			
 		};
+		
+		
+	    const setOptionMain = () => {
+	        $.ajax({
+	            type: "GET",
+	            url: "/category/category",
+	            success: function (response) {
+	                if (response) {
+	                	for(let data of response){
+	                 		$('#categoryOpt').append(`<optgroup id=categoryOpt\${data.code} label=-------\${data.category}></optgroup>`);
+	                 	}
+	                }	
+	              },
+	            error: function () {
+	               
+	            },
+	        });
+	    };		
+	    
+	    
+	    const setOptionSub = () => {
+	        $.ajax({
+	            type: "GET",
+	            url: "/category/subCategory",
+	            success: function (response) {
+	                if (response) {
+	                
+	                	for(let data of response){
+	                		console.log(data);
+	                		console.log(`<option value=\${data.code}>\${data.subcategory}</option>`);
+	                		$(`#categoryOpt\${data.categorycode}`).append(`<option value=\${data.code}>\${data.subcategory}</option>`);
+	                 		window.location.reload(true);
+	                	}
+	                }
+	              
+	            },
+	            error: function () {
+	            
+	            },
+	        });
+	    };		
+		
 		
 		
 		const insNumKey = (e) => {
@@ -111,6 +144,11 @@
 			
 		}
 		
+	    document.addEventListener("DOMContentLoaded", () => {
+	       
+	        setOptionMain();
+	        setOptionSub();
+	    });
 	
 	</script>
 </body>

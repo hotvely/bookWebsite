@@ -9,6 +9,7 @@
 </head>
 
 <body>
+	<div id="test">아이디</div>
 	<div id="home">
 		<a href="/">홈</a>
 	</div>
@@ -19,9 +20,10 @@
 	<script>
     let member = null;
     console.log(member);
-   console.log(getCookie('cart'));
+   	console.log(getCookie('cart'));
     
-    
+    const test = document.querySelector("#test");
+    test.innerText = "TEST..."
 
     const getMember = () => {
         try {
@@ -56,7 +58,6 @@
     };
 
     // 초기 페이지 로딩 시 getMember 함수 호출
-    getMember();
 
     const logout = () => {
         $.ajax({
@@ -83,7 +84,8 @@
                 if (response) {
                 	for(let data of response){
                 		console.log(data);
-                 		$('#category').append(data.category);
+                 		$('#category').append("<div>" + data.category + "</div>");
+                 		$('#subcategory').append(`<div id=subcategory\${data.code}></div>`);
                  	}
                 }	
               },
@@ -100,9 +102,10 @@
             url: "/category/subCategory",
             success: function (response) {
                 if (response) {
+                
                 	for(let data of response){
                 		console.log(data);
-                 		$('#subcategory').append(data.subcategory);
+                 		$(`#subcategory\${data.categorycode}`).append(`<a href=/book/showAll/subCategory?pageNum=1&scode=\${data.code}>\${data.subcategory}</a>`);
                  	}
                 }
               
@@ -113,8 +116,13 @@
         });
     };		
     
-    getCategory();
-    getSubCategory();
+    document.addEventListener("DOMContentLoaded", () => {
+        getMember();
+        getCategory();
+        getSubCategory();
+    });
+/*     getCategory();
+    getSubCategory(); */
     
     </script>
 </body>

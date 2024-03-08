@@ -64,11 +64,24 @@ public class BookController {
 //		log.info(list.toString());
 		return ResponseEntity.ok(paging);
 	}
-
+	
 	@GetMapping("/showAll/subCategory")
+	public ModelAndView showByCategory(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
+			@RequestParam(name = "sortNum", defaultValue = "1") int sortNum,
+			@RequestParam(name = "scode") int scode) {
+		log.info("get subCategory 뷰 페이지 들어옴 scode 는 : " + scode);
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("book/bookList");
+		mv.addObject("currPage", pageNum);
+		mv.addObject("subCategory",scode);
+		return mv;
+	}
+	
+	@PostMapping("/showAll/subCategory")
 	public ResponseEntity<Paging> showAllCategory(@RequestParam(name = "pageNum", defaultValue = "1") int pageNum,
 			@RequestParam(name = "sortNum", defaultValue = "1") int sortNum,
-			@RequestParam(name = "subCategoryNum") int subCategory) {
+			@RequestParam(name = "scode") int scode) {
+		log.info("POST MAPPING SHOW ALL SUBCATEGORY");
 		Sort sort = null;
 		switch (sortNum) {
 		case 1:
@@ -86,11 +99,10 @@ public class BookController {
 			sort = Sort.by("price").descending();
 			break;
 
-		}
-		
+		}		
 
 		Pageable pageable = (Pageable) PageRequest.of(pageNum - 1, 10, sort);
-		Page<Book> result = service.showAllCategory(pageable, subCategory);
+		Page<Book> result = service.showAllCategory(pageable, scode);
 		Paging paging = new Paging();
 		paging.setBookList(result.getContent());
 		paging.setTotalCount(result.getTotalElements());
@@ -112,6 +124,7 @@ public class BookController {
 
 	@GetMapping("/detail")
 	public ModelAndView detailView(@RequestParam(name = "code") int code) {
+		log.info("GETMAPPING /book/detail");
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("book/bookDetail");
 		mv.addObject("code", code);

@@ -43,16 +43,20 @@
             				$('#page').append('<a href="/?pageNum=' + (startPage+5) + '"><button>></button></a>');
 
             			 let HTML = '';
+            			 
             			books.map((book) => {
+            				console.log((new Date()- new Date(book.date))/ (1000*60*60*24));
             				HTML +='<tr><td>' +
             				'<img width="100px" alt="xxx" src="' + (book.image != null ? book.image : "/images/basic.jpeg") + '"/></td>' +
-            			 	'<td width="250px"><a href="book/detail?code='+book.code+'">'+book.title+'<a/></td>'+
+            			 	'<td width="250px"><a href="book/detail?code='+book.code+'">'+((book.title).length > 10 ? (book.title).substr(0,10) + "..." : (book.title))+'<a/></td>'+
             				'<td width="170px">'+ book.authority+'</td>'+
             				'<td width="120px">'+ book.price+' 원</td>'+
             				'<td width="150px">'+ book.publisher+'</td>'+
-            				'<td width="100px">'+ book.date+'</td><tr>';
+            				'<td width="130px">'+ ((new Date() - new Date(book.date))/(1000*60*60*24) < 30 ? ('신간(NEW)' + (book.date)) : (book.date))+'</td><tr>';
             				});
             			$('#bookList').append(HTML);
+            			
+            			
             		}
             	});
             }
