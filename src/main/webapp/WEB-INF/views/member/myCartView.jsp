@@ -81,6 +81,8 @@
                 const findCartItems = cartItems.find((item) => item.code == code);
                 if (findCartItems) {
                     if (action === "plus") {
+                        // html 값 변경 갯수 수량 가격
+                        //
                         findCartItems.bookCount = findCartItems.bookCount + 1;
                     } else if (action === "minus") {
                         findCartItems.bookCount = findCartItems.bookCount - 1;
