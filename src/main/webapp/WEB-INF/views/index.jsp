@@ -43,7 +43,7 @@
             				$('#page').append('<a href="/?pageNum=' + (startPage+5) + '"><button>></button></a>');
 
             			 let HTML = '';
-            			 
+
             			books.map((book) => {
             				console.log((new Date()- new Date(book.date))/ (1000*60*60*24));
             				HTML +='<tr><td>' +
@@ -55,16 +55,12 @@
             				'<td width="130px">'+ ((new Date() - new Date(book.date))/(1000*60*60*24) < 30 ? ('신간(NEW)' + (book.date)) : (book.date))+'</td><tr>';
             				});
             			$('#bookList').append(HTML);
-            			
-            			
+
+
             		}
             	});
             }
             showAll();
-
-
-
-            // 로그인시 멤버 정보 가져오는 로직
         </script>
 
         <div id="addBooks"></div>
