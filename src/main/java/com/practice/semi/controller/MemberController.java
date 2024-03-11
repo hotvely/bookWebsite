@@ -143,7 +143,7 @@ public class MemberController {
 			@RequestParam(name = "admin", required = false, defaultValue = "false") String admin) {
 		log.info("register");
 			
-		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname).admin(admin)
+		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname).admin("N")
 				.build();
 		Member registerMember = service.create(member);
 		return ResponseEntity.ok(registerMember);
@@ -159,7 +159,7 @@ public class MemberController {
 			@RequestParam(name = "nickname") String nickname,
 			@RequestParam(name = "admin" )String admin) {
 		log.info("registerAdmin");
-		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname).admin("true")
+		Member member = Member.builder().id(username).password(password).email(email).phone(phone).nickname(nickname).admin("Y")
 				.build();
 		Member registerAdmin = service.create(member);
 		log.info("관리자 가입 " + member.toString());
@@ -258,7 +258,7 @@ public class MemberController {
 					.email(email)
 					.phone(phone)
 					.nickname(nickname)
-					.admin(admin)
+					.admin("N")
 					.build();
 			member = service.update(eidtMember);			
 			session.setAttribute("member", member);

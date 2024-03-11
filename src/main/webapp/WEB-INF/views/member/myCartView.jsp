@@ -47,13 +47,10 @@
 
                 if (cartInfo != null && cartInfo.length > 0) {
                     for (const item of cartInfo) {
-                        // 책 수량이 없으면 기본값으로 1 설정
-                        if (item.bookCount === undefined) {
-                            item.bookCount = 1;
-                        }
                         // code로 쿠키찾아서 삭제
                         const deleteButton = `<button onclick="deleteCartBook(\${item.code})">책 삭제</button>`;
 
+                        const totalPrice = item.count * item.price;
                         const itemHtml =
                             `<img width="100px" alt="xxx" src="${
                                 item.image != null ? item.image : "/images/basic.jpeg"
@@ -63,10 +60,10 @@
                             `<span> \${deleteButton}</span>` +
                             `<br/>` +
                             `<div>글쓴이: \${item.authority}</div>` +
-                            `<div>가격: \${item.price}</div>` +
+                            `<div id=ip_\${item.code}>가격: \${totalPrice}</div>` +
                             `<div>수량: <button onclick="updateCart('\${item.code}','minus')">-</button>` +
-                            `<span id="quantity_\${item.code}">\${item.bookCount}</span>` +
-                            ` <button onclick="updateCart('\${item.code}','plus')">+</button></div>`;
+                            `<span id="quantity_\${item.code}">\${item.count}</span>` +
+                            `<button onclick="updateCart('\${item.code}','plus')">+</button></div>`;
                         cartElement.append(itemHtml);
                     }
                 } else {
@@ -76,13 +73,14 @@
             myCart();
             const updateCart = (code, action) => {
                 const cartData = JSON.parse(getCookie("cart"));
-                const findCartItem = cartData.find((item) => item.code === code);
 
-                if (findCartItem) {
+                const findCartItem = cartData.filter((item) => item.code == code)[0];
+
+                if (findCartItem != null) {
                     if (action === "plus") {
-                        findCartItem.bookCount += 1;
-                    } else if (action === "minus" && findCartItem.bookCount > 1) {
-                        findCartItem.bookCount -= 1;
+                        findCartItem.count += 1;
+                    } else if (action === "minus" && findCartItem.count > 1) {
+                        findCartItem.count -= 1;
                     }
 
                     const expires = new Date();
@@ -93,49 +91,17 @@
                     setCookie("cart", JSON.stringify(cartData), expiresDateString);
 
                     // HTML에서 수량 업데이트
-                    const quantityElement = document.getElementById(`quantity_${code}`);
-                    if (quantityElement) {
-                        quantityElement.textContent = findCartItem.bookCount;
+                    const quantityElement = document.getElementById(`quantity_\${code}`);
+                    const itemPrice = document.querySelector(`#ip_\${code}`);
+
+                    if (quantityElement && itemPrice) {
+                        console.log(findCartItem.count);
+                        quantityElement.textContent = findCartItem.count;
+                        itemPrice.innerHTML =
+                            "<div id=ip_\${code}>가격: " + findCartItem.count * findCartItem.price + "</div>";
                     }
                 }
             };
-
-            // const updateCart = (code, action) => {
-            // //     const cartData = JSON.parse(getCookie("cart"));
-            // //     if (cartData[code]) {
-            // //         if (action) {
-            // //             cartData[code] += 1;
-            // //             bookCount[code] = bookCount[code] + 1;
-            // //         } else {
-            // //             cartData[code] = Math.max(0, cartData[code] - 1);
-            // //             bookCount = Math.max(0, bookCount[code] - 1);
-            // //         }
-            // //         const expires = new Date();
-            // //         expires.setDate(expires.getDate() + 60);
-            // //         const expiresDateString = expires.toUTCString();
-            // //         setCookie("cart", JSON.stringify(cartData), expiresDateString);
-            // //     }
-            // //     updateUI();
-            // // };
-            // // const updateUI = () => {
-            // //     // 수량을 표시하는 DOM 업데이트
-            // //     for (let code in bookCount) {
-            // //         const quantityElement = document.getElementById("quantity");
-            // //         if (quantityElement) {
-            // //             quantityElement.innerText = bookCount[code];
-            // //         }
-            // //     }
-            // // };
-            // const findCartItems = cartItems.find((item) => item.code == code);
-            // if (findCartItems) {
-            //     if (action === "plus") {
-            //         // html 값 변경 갯수 수량 가격
-            //         findCartItems.bookCount = findCartItems.bookCount + 1;
-            //     } else if (action === "minus") {
-            //         findCartItems.bookCount = findCartItems.bookCount - 1;
-            //     }
-            //     document.cookie = "cart=" + encodeURIComponent(JSON.stringify(cartItems));
-            // }
         </script>
     </body>
 </html>
