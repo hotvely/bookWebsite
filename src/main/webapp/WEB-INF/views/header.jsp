@@ -6,6 +6,8 @@
 <title>Insert title here</title>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script type="text/javascript" src="/javascript/Cookie.js"></script>
+<!-- axios 사용하기 위한 스크립트... -->
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 
 <body>

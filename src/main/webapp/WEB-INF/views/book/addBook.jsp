@@ -72,7 +72,7 @@
 				date : $('#date').val() == "" ? null : $('#date').val(),
 				img : $('#img').val()				
 			};
-			console.log(book);
+			//console.log(book);
 			
 			
 			console.log("책 추가 함수..");
@@ -111,6 +111,14 @@
 	        });
 	    };		
 	    
+	    const setOptionSubTest = async () => {
+	    	
+	    	const response = await axios.get('/category/subCategory');
+	    	console.log("axios test  >>>> " , response);
+	    	
+	    }
+	    setOptionSubTest();
+	    
 	    
 	    const setOptionSub = () => {
 	        $.ajax({
@@ -120,10 +128,10 @@
 	                if (response) {
 	                
 	                	for(let data of response){
-	                		console.log(data);
-	                		console.log(`<option value=\${data.code}>\${data.subcategory}</option>`);
+	                		//console.log(data);
+	                		
 	                		$(`#categoryOpt\${data.categorycode}`).append(`<option value=\${data.code}>\${data.subcategory}</option>`);
-	                 		window.location.reload(true);
+	                 		//window.location.reload(true);
 	                	}
 	                }
 	              
@@ -132,6 +140,9 @@
 	            
 	            },
 	        });
+	        
+	        
+	        
 	    };		
 		
 		
