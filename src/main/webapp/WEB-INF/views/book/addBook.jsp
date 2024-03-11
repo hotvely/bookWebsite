@@ -9,8 +9,7 @@
 <body>
 
 	<%@ include file="/WEB-INF/views/header.jsp"%>
-	
-	관리자용 책 추가
+
 	<div>
 		<div>
 			<span>제목</span>
@@ -61,6 +60,8 @@
 	</div>
 
 	<script>
+
+	
 		const addBookForm = () => {
 			const book = {
 				title : $('#title').val(),
@@ -94,57 +95,29 @@
 		};
 		
 		
-	    const setOptionMain = () => {
-	        $.ajax({
-	            type: "GET",
-	            url: "/category/category",
-	            success: function (response) {
-	                if (response) {
-	                	for(let data of response){
-	                 		$('#categoryOpt').append(`<optgroup id=categoryOpt\${data.code} label=-------\${data.category}></optgroup>`);
-	                 	}
-	                }	
-	              },
-	            error: function () {
-	               
-	            },
-	        });
+	    const setOptionMain = async () => {
+	    	const response = await axios.get('/category/category');
+	    	if(response.data != null){
+	    		for(let data of response.data){
+             		$('#categoryOpt').append(`<optgroup id=categoryOpt\${data.code} label=-------\${data.category}></optgroup>`);
+             	}
+	    	}
 	    };		
+	    setOptionMain();
 	    
-	    const setOptionSubTest = async () => {
-	    	
+	    const setOptionSub = async () => {
 	    	const response = await axios.get('/category/subCategory');
-	    	console.log("axios test  >>>> " , response);
 	    	
-	    }
-	    setOptionSubTest();
-	    
-	    
-	    const setOptionSub = () => {
-	        $.ajax({
-	            type: "GET",
-	            url: "/category/subCategory",
-	            success: function (response) {
-	                if (response) {
-	                
-	                	for(let data of response){
-	                		//console.log(data);
-	                		
-	                		$(`#categoryOpt\${data.categorycode}`).append(`<option value=\${data.code}>\${data.subcategory}</option>`);
-	                 		//window.location.reload(true);
-	                	}
-	                }
-	              
-	            },
-	            error: function () {
-	            
-	            },
-	        });
-	        
-	        
-	        
+	    	if(response.data != null){
+	    		for(let data of response.data){
+            		//console.log(data);
+            		
+            		$(`#categoryOpt\${data.categorycode}`).append(`<option value=\${data.code}>\${data.subcategory}</option>`);
+             		//window.location.reload(true);
+            	}
+	    	}	        
 	    };		
-		
+	    setOptionSub();
 		
 		
 		const insNumKey = (e) => {
@@ -154,12 +127,6 @@
 			return true;
 			
 		}
-		
-	    document.addEventListener("DOMContentLoaded", () => {
-	       
-	        setOptionMain();
-	        setOptionSub();
-	    });
 	
 	</script>
 </body>

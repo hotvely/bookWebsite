@@ -1,15 +1,16 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="UTF-8" />
-        <title>Insert title here</title>
-        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-    </head>
-    <body>
-        <%@ include file="/WEB-INF/views/header.jsp"%> 이 줄 부터는 메인 페이지 입니다..
+<head>
+<meta charset="UTF-8" />
+<title>Insert title here</title>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+<body>
+	<%@ include file="/WEB-INF/views/header.jsp"%>
+	이 줄 부터는 메인 페이지 입니다..
 
-        <script>
+	<script>
 
             let books = null;
             const showAll = () => {
@@ -61,29 +62,36 @@
             	});
             }
             showAll();
+            
+            const checkMember = () => {
+            	if(member == null){
+            		alert("관리자 전용")
+            	}
+            }
         </script>
 
-        <div id="addBooks"></div>
+	<div id="addBooks">
+		<a href="/book/create">
+			<button>책추가</button>
+		</a>
+	</div>
 
-        <a href="/book/create">
-            <button>책추가</button>
-        </a>
 
-        <table id="bookList">
-            <tr>
-                <td>책표지</td>
-                <td>제목</td>
-                <td>글쓴이</td>
-                <td>가격</td>
-                <td>출판사</td>
-                <td>출간일</td>
-            </tr>
-            <tr>
-                <td colspan="6">
-                    <hr />
-                </td>
-            </tr>
-        </table>
-        <div id="page"></div>
-    </body>
+	<table id="bookList">
+		<tr>
+			<td>책표지</td>
+			<td>제목</td>
+			<td>글쓴이</td>
+			<td>가격</td>
+			<td>출판사</td>
+			<td>출간일</td>
+		</tr>
+		<tr>
+			<td colspan="6">
+				<hr />
+			</td>
+		</tr>
+	</table>
+	<div id="page"></div>
+</body>
 </html>
