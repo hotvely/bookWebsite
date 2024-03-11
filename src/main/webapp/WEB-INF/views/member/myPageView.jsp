@@ -10,7 +10,7 @@ pageEncoding="UTF-8"%>
     <body>
         <%@ include file="/WEB-INF/views/header.jsp" %>
 
-        <h1>내 정보 ${member.id }</h1>
+        <h1>내 정보 ${member.id}</h1>
         <div id="info"></div>
 
         <div id="updateModal">
