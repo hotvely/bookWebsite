@@ -5,6 +5,7 @@
         <meta charset="UTF-8" />
         <title>Insert title here</title>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
         <h1>로그인</h1>
@@ -20,32 +21,37 @@
 
         <br />
 
-        <button onclick="login()">로그인</button>
+        <button id="loginBtn" onclick="login()">로그인</button>
 
         <script>
-            const login = () => {
-                let member = {
-                    username: $("#username").val(),
-                    password: $("#password").val(),
-                };
-                $.ajax({
-                    url: "/member/login",
-                    type: "POST",
-                    data: member,
-                    success: function (response) {
-                        console.log(response);
-                        if (response) {
-                            window.location.href = "/";
-                        } else {
-                            console.log("로그인 실패");
-                            window.location.href = "/member/login";
-                        }
-                    },
-                    error: function (error) {
-                        console.log("로그인 에러");
-                        window.location.href = "/member/login";
-                    },
-                });
+            $(document).ready(function () {
+                // 현재 URL이 /member/login/admin인 경우에만 loginAdmin 버튼을 추가
+                if (window.location.pathname === "/member/login/admin") {
+                    $("body").append('<button id="registerAdminBtn" onclick="adminLogin()">관리자 로그인</button>');
+                    $("#loginBtn").hide();
+                }
+            });
+
+            const login = async () => {
+                let member = new URLSearchParams();
+                member.append("username", $("#username").val());
+                member.append("password", $("#password").val());
+                const response = await axios.post("/member/login", member);
+                if (response) {
+                    window.location = "/";
+                }
+            };
+
+            const adminLogin = async () => {
+                let member = new URLSearchParams();
+                member.append("username", $("#username").val());
+                member.append("password", $("#password").val());
+                member.append("admin", "Y");
+                const response = await axios.post("/member/login/admin", member);
+                if (response) {
+                    alert("관리자 로그인");
+                    window.location = "/";
+                }
             };
         </script>
     </body>

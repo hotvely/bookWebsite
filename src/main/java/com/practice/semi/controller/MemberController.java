@@ -52,6 +52,16 @@ public class MemberController {
 	        mv.addObject("admin", true);
 	        return mv;
 	    }
+	 
+//	 // 관리자
+	 @GetMapping("/login/admin")
+	 public ModelAndView loginAdminView() {
+		 log.info("관리자 로그인 페이지 들어옴");
+		 ModelAndView mv = new ModelAndView();
+		 mv.setViewName("/member/loginView");
+		 mv.addObject("admin", true);
+		 return mv;
+	 }
 
 	@GetMapping("/login")
 	public ModelAndView loginView() {
@@ -167,9 +177,11 @@ public class MemberController {
 	}
 
 	// 아이디 중복 체크
-	@GetMapping("/idCheck")
+	@PostMapping("/idCheck")
 	public ResponseEntity<Boolean>idCheck(@RequestParam(name = "username") String username){
+		  log.info("idCheck started for username: {}", username);
 		Member member = service.idCheck(username);
+		  log.info("idCheck started for username: {}", username);
 		log.info("중복방지 들어오냐");
 		if(member == null) {
 			// 아이디 중복 아닐때
@@ -184,7 +196,7 @@ public class MemberController {
 	};
 	
 	// 닉네임 중복 체크
-	@GetMapping("/nickCheck")
+	@PostMapping("/nickCheck")
 	public ResponseEntity<Boolean>nickCheck(@RequestParam(name = "nickname") String nickname){
 		Member member = service.nickCheck(nickname);
 
@@ -212,6 +224,28 @@ public class MemberController {
 			@RequestParam(name = "email") String email) {
 		String pwd = service.findPwd(id, email);
 		return ResponseEntity.ok(pwd);
+	}
+	
+	// 관리자 로그인
+	@PostMapping("/login/admin")
+	public ResponseEntity<Boolean> adminLogin(
+			@RequestParam(name = "username")String id ,
+			@RequestParam(name = "password")String password,
+			@RequestParam(name = "admin", defaultValue = "N")String admin,
+			HttpServletRequest request){
+		log.info("관리자 로그인 들어오나");
+		Member member = service.loginMember(id, password);
+		if(member!=null) {
+			if("Y".equals(admin)) {
+				session = request.getSession();
+				session.setAttribute("member", member);
+				log.info("관리자 아이디 : " + member);
+				return ResponseEntity.ok(true);
+			}else {
+				return ResponseEntity.ok(false);
+			}
+		}
+		return null;	
 	}
 
 	// 로그인

@@ -6,6 +6,8 @@ pageEncoding="UTF-8"%>
         <meta charset="UTF-8" />
         <title>Insert title here</title>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <!-- axios 사용하기 위한 스크립트... -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
         <%@ include file="/WEB-INF/views/header.jsp" %>
@@ -64,8 +66,8 @@ pageEncoding="UTF-8"%>
         </div>
 
         <script>
-            const updateMember = () => {
-                let member = {
+            const updateMember = async () => {
+                let member = new URLSearchParams({
                     code: $("#usercode").val(),
                     username: $("#username").val(),
                     password: $("#password").val(),
@@ -73,44 +75,22 @@ pageEncoding="UTF-8"%>
                     phone: $("#phone").val(),
                     nickname: $("#nickname").val(),
                     admin: $("#admin").val(),
-                };
-                $.ajax({
-                    url: "/member/update",
-                    type: "PUT",
-                    data: member,
-                    success: function (response) {
-                        console.log(response);
-                        alert("정보수정 성공");
-                        if (response != null) {
-                            modal.style.display = "none";
-                            window.location.href = "/";
-                        }
-                    },
-                    error: function (error) {
-                        console.log("정보수정 에러");
-                    },
                 });
+                const response = await axios.put("/member/update", member);
+                alert("정보 수정 성공");
+                if (response != null) {
+                    modal.style.display = "none";
+                    window.location.href = "/";
+                }
             };
 
-            const deleteMembr = () => {
+            const deleteMembr = async () => {
                 const code = $("#usercode").val();
-                $.ajax({
-                    url: "/member/delete?code=" + code,
-                    type: "DELETE",
-                    success: function (response) {
-                        console.log(response);
-                        alert("회원탈퇴 성공");
-                        if (response != null) {
-                            window.location.href = "/";
-                        }
-                    },
-                    error: function (error) {
-                        console.log("회원탙퇴 에러");
-                    },
-                });
+                const response = await axios.delete("/member/delete?code=" + code);
+                if (response != null) {
+                    window.location.href = "/";
+                }
             };
-
-            // $("#info").append("<div>${member.id}</div>");
 
             const modal = document.querySelector("#updateModal");
             const btnOpenModal = document.querySelector("#btn-open-modal");

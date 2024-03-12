@@ -73,8 +73,10 @@
             myCart();
             const updateCart = (code, action) => {
                 const cartData = JSON.parse(getCookie("cart"));
+                console.log(cartData);
 
                 const findCartItem = cartData.filter((item) => item.code == code)[0];
+                console.log(findCartItem);
 
                 if (findCartItem != null) {
                     if (action === "plus") {

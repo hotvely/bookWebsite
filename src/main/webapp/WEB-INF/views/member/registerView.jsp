@@ -5,6 +5,8 @@
         <meta charset="UTF-8" />
         <title>Insert title here</title>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+        <!-- axios 사용하기 위한 스크립트... -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
         <h1>회원가입</h1>
@@ -17,7 +19,6 @@
         <div class="form-el">
             비밀번호 :
             <input type="text" name="password" id="password" placeholder="비밀번호를 입력해 주세요" required />
-            <!-- <div id="pwdWarning" class="warning-message"></div> -->
         </div>
 
         <div class="form-el">
@@ -27,12 +28,10 @@
 
         <div class="form-el">
             이메일 : <input type="text" name="email" id="email" placeholder="이메일을 입력해 주세요" required />
-            <!-- <div id="emailWarning" class="warning-message"></div> -->
         </div>
 
         <div class="form-el">
             전화번호 : <input type="text" name="phone" id="phone" placeholder="전화 번호를 입력해 주세요" required />
-            <!-- <div id="phoneWarning" class="warning-message"></div> -->
         </div>
 
         <br />
@@ -43,10 +42,6 @@
             let isUserId = false;
             let isNick = false;
 
-            // const warningMessage = (id, message) => {
-            //     $(`#${id}`).text(message);
-            // };
-
             $(document).ready(function () {
                 // 현재 URL이 /member/register/admin인 경우에만 registerAdmin 버튼을 추가
                 if (window.location.pathname === "/member/register/admin") {
@@ -56,7 +51,7 @@
             });
 
             // 아이디 중복 체크 로직
-            const checkId = () => {
+            const checkId = async () => {
                 let username = $("#username").val();
                 const idRegExp = /^[a-zA-z0-9]{4,12}$/;
 
@@ -64,123 +59,104 @@
                     alert("아이디는 4-12글자 사이로 대소문자 또는 숫자만 입력해 주세요.");
                     return;
                 }
+                const response = await axios.post("/member/idCheck?username=" + username);
 
-                $.ajax({
-                    url: "/member/idCheck?username=" + username,
-                    type: "GET",
-                    success: function (response) {
-                        if (response) {
-                            alert("사용 가능한 아이디 입니다.");
-                            isUserId = true;
-                        } else {
-                            alert("이미 사용중인 아이디 입니다.");
-                            isUserId = false;
-                        }
-                    },
-                });
+                if (response.data) {
+                    alert("사용 가능한 아이디 입니다.");
+                    isUserId = true;
+                } else {
+                    alert("이미 사용중인 아이디 입니다.");
+                    isUserId = false;
+                }
             };
 
             // 닉네임 중복 체크 로직
-            const checkNick = () => {
+            const checkNick = async () => {
                 let nickname = $("#nickname").val();
                 if (nickname.length < 2 || nickname.length > 8) {
                     alert("닉네임은 2글자 이상 8글자 이하로 입력해주세요.");
                     return;
                 }
-                $.ajax({
-                    url: "/member/nickCheck?nickname=" + nickname,
-                    type: "GET",
-                    success: function (response) {
-                        if (response) {
-                            alert("사용 가능한 닉네임 입니다.");
-                            isNick = true;
-                        } else {
-                            alert("이미 사용중인 닉네임 입니다.");
-                            isNick = false;
-                        }
-                    },
-                });
+                const response = await axios.post("/member/nickCheck?nickname=" + nickname);
+                if (response.data) {
+                    alert("사용 가능한 닉네임 입니다.");
+                    isNick = true;
+                } else {
+                    alert("이미 사용중인 닉네임 입니다.");
+                    isNick = false;
+                }
             };
 
             // 아이디 닉네임 중복 체크후 가입 로직 실행
-            const register = () => {
-                let member = {
+            const register = async () => {
+                let member = new URLSearchParams({
                     username: $("#username").val(),
                     password: $("#password").val(),
                     email: $("#email").val(),
                     phone: $("#phone").val(),
                     nickname: $("#nickname").val(),
-                };
+                });
 
-                if (!member.username || !member.password || !member.email || !member.password || !member.nickname) {
-                    alert("모든 정보를 입력하세요.");
-                    return;
+                if (
+                    !member.get("username") ||
+                    !member.get("password") ||
+                    !member.get("email") ||
+                    !member.get("password") ||
+                    !member.get("nickname")
+                ) {
+                    return alert("모든 정보를 입력하세요.");
                 }
 
                 if (!isUserId) {
-                    alert("아이디 중복을 확인해주세요.");
-                    return;
+                    return alert("아이디 중복을 확인해주세요.");
                 }
 
                 if (!isNick) {
-                    alert("닉네임 중복을 확인해주세요.");
-                    return;
+                    return alert("닉네임 중복을 확인해주세요.");
                 }
 
                 const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-                if (!pwdRegExp.test(member.password)) {
-                    // warningMessage("pwdWarning", "숫자+영문자+특수문자 사용해서 8자리 이상 입력해주세요.");
-                    alert("숫자+영문자+특수문자 사용해서 8자리 이상 입력해주세요.");
-                    return;
+                if (!pwdRegExp.test(member.get("password"))) {
+                    return alert("숫자+영문자+특수문자 사용해서 8자리 이상 입력해주세요.");
                 }
 
                 const emailRegExp = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
-                if (!emailRegExp.test(member.email)) {
-                    // warningMessage("emailWarning", "이메일 형식이 올바르지 않습니다.");
-                    alert("이메일 형식이 올바르지 않습니다.");
-                    return;
+                if (!emailRegExp.test(member.get("email"))) {
+                    return alert("이메일 형식이 올바르지 않습니다.");
                 }
 
                 const phoneRegExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-                if (!phoneRegExp.test(member.phone)) {
-                    // warningMessage("phoneWarning", "올바른 전화번호 형식이 아닙니다.");
-                    alert("올바른 전화번호 형식이 아닙니다.");
-                    return;
+                if (!phoneRegExp.test(member.get("phone"))) {
+                    return alert("올바른 전화번호 형식이 아닙니다.");
                 }
 
-                $.ajax({
-                    url: "/member/register",
-                    type: "POST",
-                    data: member,
-                    success: function (response) {
-                        console.log(response);
-                        if (response != null) {
-                            alert("회원가입 성공");
-                            window.location.href = "/";
-                            console.log(member);
-                        }
-                    },
-                    error: function (error) {
-                        console.log("회원가입 에러");
-                    },
-                });
+                const response = await axios.post("/member/register", member);
+                if (response != null) {
+                    alert("회원가입 성공");
+                    window.location.href = "/";
+                }
             };
 
             // 관리자 회원가입
-            const registerAdmin = () => {
+            const registerAdmin = async () => {
                 if (isUserId) {
-                    let member = {
+                    let member = new URLSearchParams({
                         username: $("#username").val(),
                         password: $("#password").val(),
                         email: $("#email").val(),
                         phone: $("#phone").val(),
                         nickname: $("#nickname").val(),
                         admin: true,
-                    };
+                    });
 
-                    if (!member.username || !member.password || !member.email || !member.password || !member.nickname) {
-                        alert("모든 정보를 입력하세요.");
-                        return;
+                    if (
+                        !member.get("username") ||
+                        !member.get("password") ||
+                        !member.get("email") ||
+                        !member.get("password") ||
+                        !member.get("nickname")
+                    ) {
+                        return alert("모든 정보를 입력하세요.");
                     }
 
                     if (!isUserId) {
@@ -189,44 +165,29 @@
                     }
 
                     const pwdRegExp = /^(?=.*[a-zA-Z])(?=.*[!@#$%^*+=-])(?=.*[0-9]).{8,25}$/;
-                    if (!pwdRegExp.test(member.password)) {
-                        alert("숫자+영문자+특수문자 사용해서 8자리 이상 입력해주세요.");
-                        return;
+                    if (!pwdRegExp.test(member.get("password"))) {
+                        return alert("숫자+영문자+특수문자 사용해서 8자리 이상 입력해주세요.");
                     }
 
                     const emailRegExp = /^[A-Za-z0-9_]+[A-Za-z0-9]*[@]{1}[A-Za-z0-9]+[A-Za-z0-9]*[.]{1}[A-Za-z]{1,3}$/;
-                    if (!emailRegExp.test(member.email)) {
-                        alert("이메일 형식이 올바르지 않습니다.");
-                        return;
+                    if (!emailRegExp.test(member.get("email"))) {
+                        return alert("이메일 형식이 올바르지 않습니다.");
                     }
 
                     const phoneRegExp = /^01([0|1|6|7|8|9])-?([0-9]{3,4})-?([0-9]{4})$/;
-                    if (!phoneRegExp.test(member.phone)) {
-                        alert("올바른 전화번호 형식이 아닙니다.");
-                        return;
+                    if (!phoneRegExp.test(member.get("phone"))) {
+                        return alert("올바른 전화번호 형식이 아닙니다.");
                     }
-
                     if (!isNick) {
                         alert("닉네임 중복을 확인해주세요.");
                         return;
                     }
 
-                    $.ajax({
-                        url: "/member/register/admin",
-                        type: "POST",
-                        data: member,
-                        success: function (response) {
-                            console.log(response);
-                            if (response != null) {
-                                alert("운영자 가입 성공");
-                                window.location.href = "/";
-                                console.log(member);
-                            }
-                        },
-                        error: function (error) {
-                            console.log("운영자 가입 에러");
-                        },
-                    });
+                    const response = await axios.post("/member/register/admin", member);
+                    if (response != null) {
+                        alert("관리자 가입 성공");
+                        window.location.href = "/";
+                    }
                 } else {
                     alert("아이디 중복을 확인해주세요.");
                 }
