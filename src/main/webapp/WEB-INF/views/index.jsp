@@ -11,64 +11,84 @@
 
         <script>
 
-            let books = null;
-            const showAll = () => {
-            	$.ajax({
-            		url: "/book/showAll?pageNum=${currPage}",
-            		method: "GET",
-            		success: function(data){
-            			console.log(data);
-            			books = [...data.bookList];
+                    let books = null;
+                    const showAll = () => {
+                    	$.ajax({
+                    		url: "/book/showAll?pageNum=${currPage}",
+                    		method: "GET",
+                    		success: function(data){
+                    			console.log(data);
+                    			books = [...data.bookList];
 
-            			const startPage = (Math.floor((${currPage} - 1) / 5) * 5) + 1;
-            			if(data.hasPrev && startPage > 5)
-            				$('#page').append('<a href="/?pageNum='+(startPage-5)+ '"><button><</button></a>');
+                    			const startPage = (Math.floor((${currPage} - 1) / 5) * 5) + 1;
+                    			if(data.hasPrev && startPage > 5)
+                    				$('#page').append('<a href="/?pageNum='+(startPage-5)+ '"><button><</button></a>');
 
-            			// 실제 페이지들 나열 할 곳..
-            			let endPage = startPage + 5;
-            			if(endPage > data.totalPages){
-            				endPage = data.totalPages;
-            			}
+                    			// 실제 페이지들 나열 할 곳..
+                    			let endPage = startPage + 5;
+                    			if(endPage > data.totalPages){
+                    				endPage = data.totalPages;
+                    			}
 
-            			console.log("endPage", endPage);
-            			for(let idx = startPage ; idx < endPage; idx++){
-            				$('#page').append('<a href="/?pageNum=' + (idx) + '"><button>' + (idx)+ '</button></a>');
-            			}
+                    			console.log("endPage", endPage);
+                    			for(let idx = startPage ; idx < endPage; idx++){
+                    				$('#page').append('<a href="/?pageNum=' + (idx) + '"><button>' + (idx)+ '</button></a>');
+                    			}
 
-            			if(startPage == data.totalPages || data.totalPages <= 5)
-            				$('#page').append('<a href="/?pageNum=' + endPage + '"><button>' +endPage + '</button></a>');
+                    			if(startPage == data.totalPages || data.totalPages <= 5)
+                    				$('#page').append('<a href="/?pageNum=' + endPage + '"><button>' +endPage + '</button></a>');
 
-            			console.log("startPage + 5 ",startPage + 5);
-            			if(data.hasNext && endPage - startPage >= 4)
-            				$('#page').append('<a href="/?pageNum=' + (startPage+5) + '"><button>></button></a>');
+                    			console.log("startPage + 5 ",startPage + 5);
+                    			if(data.hasNext && endPage - startPage >= 4)
+                    				$('#page').append('<a href="/?pageNum=' + (startPage+5) + '"><button>></button></a>');
 
-            			 let HTML = '';
+                    			 let HTML = '';
 
-            			books.map((book) => {
-            				console.log((new Date()- new Date(book.date))/ (1000*60*60*24));
-            				HTML +='<tr><td>' +
-            				'<img width="100px" alt="xxx" src="' + (book.image != null ? book.image : "/images/basic.jpeg") + '"/></td>' +
-            			 	'<td width="250px"><a href="book/detail?code='+book.code+'">'+((book.title).length > 10 ? (book.title).substr(0,10) + "..." : (book.title))+'<a/></td>'+
-            				'<td width="170px">'+ book.authority+'</td>'+
-            				'<td width="120px">'+ book.price+' 원</td>'+
-            				'<td width="150px">'+ book.publisher+'</td>'+
-            				'<td width="130px">'+ ((new Date() - new Date(book.date))/(1000*60*60*24) < 30 ? ('신간(NEW)' + (book.date)) : (book.date))+'</td><tr>';
-            				});
-            			$('#bookList').append(HTML);
+                    			books.map((book) => {
+                    				console.log((new Date()- new Date(book.date))/ (1000*60*60*24));
+                    				HTML +='<tr><td>' +
+                    				'<img width="100px" alt="xxx" src="' + (book.image != null ? book.image : "/images/basic.jpeg") + '"/></td>' +
+                    			 	'<td width="250px"><a href="book/detail?code='+book.code+'">'+((book.title).length > 10 ? (book.title).substr(0,10) + "..." : (book.title))+'<a/></td>'+
+                    				'<td width="170px">'+ book.authority+'</td>'+
+                    				'<td width="120px">'+ book.price+' 원</td>'+
+                    				'<td width="150px">'+ book.publisher+'</td>'+
+                    				'<td width="130px">'+ ((new Date() - new Date(book.date))/(1000*60*60*24) < 30 ? ('신간(NEW)' + (book.date)) : (book.date))+'</td><tr>';
+                    				});
+                    			$('#bookList').append(HTML);
 
 
-            		}
-            	});
-            }
+                    		}
+                    	});
+                    }
 
-            showAll();
+                    showAll();
 
-            const checkMember = () => {
-            	if(member == null){
-            		alert("관리자 전용")
-            	}
-            }
+                    const checkMember = () => {
+                    	if(member == null){
+                    		alert("관리자 전용")
+                    	}
+                    }
+
+            // if (member != null && member.admin == "Y") {
+            //                         $("#addBooks").show();
+            //                         // } else if (member == null) {
+            //                         //     $("#addBooks").hide();
+            //                     } else {
+            //                         $("#addBooks").hide();
+            //                     }
         </script>
+        <style>
+            #bookList {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            a {
+                margin-right: 10px;
+                color: gray;
+                text-decoration: none;
+            }
+        </style>
 
         <div id="addBooks">
             <a href="/book/create">

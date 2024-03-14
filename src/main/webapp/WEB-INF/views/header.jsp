@@ -4,6 +4,12 @@
     <head>
         <meta charset="UTF-8" />
         <title>Insert title here</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+            crossorigin="anonymous"
+        />
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <script type="text/javascript" src="/javascript/Cookie.js"></script>
         <!-- axios 사용하기 위한 스크립트... -->
@@ -21,30 +27,29 @@
                     const response = await axios.post("/header");
                     if (response.data != "") {
                         member = response.data;
-                        $("#header").append("지금은 로그인이 되어 있는 상태 입니다<br/>");
-                        $("#header").append(
-                            '<a href="/member/myPage">마이페이지</a>' +
+                        $(".navbar-nav").append(
+                            '<a class="nav-link active" aria-current="page" href="/member/myPage">마이페이지</a>' +
                                 "<br/>" +
-                                '<a href="/member/myCart">장바구니</a>' +
+                                '<a class="nav-link" href="/member/myCart">장바구니</a>' +
                                 "<br/>" +
-                                '<a href="/member/logout">a태그 로그아웃</a>' +
-                                "<br/>" +
-                                '<button onclick="logout()">로그아웃</button>'
+                                '<button class="nav-link active" aria-current="page" onclick="logout()">로그아웃</button>'
                         );
+                        // if (member == null) {
+                        //     $("#addBooks").hide();
+                        // }
 
                         // 일반 유저면 책 추가 버튼 숨김
-                        if (member != null && member.admin === "Y") {
+                        if (member != null && member.admin == "Y") {
                             $("#addBooks").show();
+                            // } else if (member == null) {
+                            //     $("#addBooks").hide();
                         } else {
                             $("#addBooks").hide();
                         }
                     } else {
-                        $("#header").append("로그인 필요해요<br/>");
-                        $("#header").append(
-                            '<a href="/member/register">회원가입</a>  <a href="/member/login">로그인</a>'
+                        $(".navbar-nav").append(
+                            '<a class="nav-link active" aria-current="page" href="/member/register">회원가입</a> <a class="nav-link active" aria-current="page" href="/member/login">로그인</a>'
                         );
-                        // 항시 책 추가 버튼 숨김 비 로그인시에 안보이게 하기위해
-                        $("#addBooks").hide();
                     }
                 } catch (error) {
                     console.error("Error: " + error);
@@ -71,8 +76,15 @@
                 console.log(response);
                 if (response.data != null) {
                     for (let data of response.data) {
-                        $("#category").append("<div>" + data.category + "</div>");
-                        $("#subcategory").append(`<div id=subcategory\${data.code}></div>`);
+                        $("#category").append(
+                            ` <ul class="list-group list-group-horizontal-xxl">` +
+                                `<li class="list-group-item">` +
+                                data.category +
+                                `</li>` +
+                                `<li class="list-group-item"><div id="subcategory\${data.code}"></div></li>` +
+                                `</ul>`
+                        );
+                        // $("#subcategory").append(`<div id=subcategory\${data.code}></div>`);
                     }
                 }
             };
@@ -82,25 +94,63 @@
                 if (response.data != null) {
                     for (let data of response.data) {
                         $(`#subcategory\${data.categorycode}`).append(
-                            `<a href=/book/showAll/subCategory?pageNum=1&scode=\${data.code}>\${data.subcategory}</a>`
+                            `<a style="margin-right: 10px; color: gray;
+    text-decoration: none;" href=/book/showAll/subCategory?pageNum=1&scode=\${data.code}>\${data.subcategory}</a>`
                         );
                     }
                 }
             };
             getMember();
-            getCategory();
-            getSubCategory();
+            getCategory().then(() => {
+                // getCategory가 완료되면 getSubCategory 호출
+                getSubCategory();
+            });
         </script>
 
-        <div id="home">
-            <a href="/">홈</a>
+        <div id="nav-bar">
+            <nav class="navbar navbar-expand-lg bg-body-tertiary">
+                <div class="container-fluid" style="background-color: antiquewhite">
+                    <a class="navbar-brand" href="/">홈</a>
+                    <button
+                        class="navbar-toggler"
+                        type="button"
+                        data-bs-toggle="collapse"
+                        data-bs-target="#navbarNavAltMarkup"
+                        aria-controls="navbarNavAltMarkup"
+                        aria-expanded="false"
+                        aria-label="Toggle navigation"
+                    >
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                        <div class="navbar-nav"></div>
+                    </div>
+                </div>
+            </nav>
         </div>
-        <div id="header"></div>
-        <div id="category"></div>
-        <div id="subcategory"></div>
 
-        <script>
-            console.log(member);
-        </script>
+        <div id="categories">
+            <div id="category"></div>
+            <div id="subcategory"></div>
+        </div>
+
+        <style>
+            #nav-bar {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                background-color: antiquewhite;
+            }
+            #categories {
+                margin-top: 20px;
+                margin-bottom: 20px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            .bg-body-tertiary {
+                background-color: inherit !important; /* nav-bar 배경색 상속 */
+            }
+        </style>
     </body>
 </html>

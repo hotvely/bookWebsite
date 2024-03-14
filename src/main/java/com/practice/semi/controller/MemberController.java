@@ -54,14 +54,22 @@ public class MemberController {
 	    }
 	 
 //	 // 관리자
-	 @GetMapping("/login/admin")
-	 public ModelAndView loginAdminView() {
-		 log.info("관리자 로그인 페이지 들어옴");
-		 ModelAndView mv = new ModelAndView();
-		 mv.setViewName("/member/loginView");
-		 mv.addObject("admin", true);
-		 return mv;
-	 }
+//	 @GetMapping("/login/admin")
+//	 public ModelAndView loginAdminView() {
+//		 log.info("관리자 로그인 페이지 들어옴");
+//		 ModelAndView mv = new ModelAndView();
+//		 mv.setViewName("/member/loginView");
+//		 mv.addObject("admin", true);
+//		 return mv;
+//	 }
+	 
+		@GetMapping("/test")
+		public ModelAndView test() {
+			log.info("붙스트랩....");
+			ModelAndView mv = new ModelAndView();
+			mv.setViewName("/member/test");
+			return mv;
+		}
 
 	@GetMapping("/login")
 	public ModelAndView loginView() {
@@ -227,31 +235,31 @@ public class MemberController {
 	}
 	
 	// 관리자 로그인
-	@PostMapping("/login/admin")
-	public ResponseEntity<Boolean> adminLogin(
-			@RequestParam(name = "username")String id ,
-			@RequestParam(name = "password")String password,
-			@RequestParam(name = "admin", defaultValue = "N")String admin,
-			HttpServletRequest request){
-		log.info("관리자 로그인 들어오나");
-		Member member = service.loginMember(id, password);
-		if(member!=null) {
-			if("Y".equals(admin)) {
-				session = request.getSession();
-				session.setAttribute("member", member);
-				log.info("관리자 아이디 : " + member);
-				return ResponseEntity.ok(true);
-			}else {
-				return ResponseEntity.ok(false);
-			}
-		}
-		return null;	
-	}
+//	@PostMapping("/login/admin")
+//	public ResponseEntity<Boolean> adminLogin(
+//			@RequestParam(name = "username")String id ,
+//			@RequestParam(name = "password")String password,
+//			@RequestParam(name = "admin", defaultValue = "N")String admin,
+//			HttpServletRequest request){
+//		log.info("관리자 로그인 들어오나");
+//		Member member = service.loginMember(id, password);
+//		if(member!=null) {
+//			if("Y".equals(admin)) {
+//				session = request.getSession();
+//				session.setAttribute("member", member);
+//				log.info("관리자 아이디 : " + member);
+//				return ResponseEntity.ok(true);
+//			}else {
+//				return ResponseEntity.ok(false);
+//			}
+//		}
+//		return null;	
+//	}
 
 	// 로그인
 	// 세션 생성 후 저장
 	@PostMapping("/login")
-	public ResponseEntity<Boolean> login(
+	public ResponseEntity<String> login(
 			@RequestParam(name = "username") String id,
 			@RequestParam(name = "password") String password,
 			HttpServletRequest request) {
@@ -262,12 +270,19 @@ public class MemberController {
 			if (member != null) {
 				session = request.getSession();
 				session.setAttribute("member", member); // key value
-				return ResponseEntity.ok(true);
+				
+				if("Y".equals(member.getAdmin())) {
+					log.info("관리자 : " + member);
+					return ResponseEntity.ok("Y");
+				}else {
+					log.info("유저 : " + member);
+					return ResponseEntity.ok("N");				}
+				
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return ResponseEntity.ok(false);
+		return ResponseEntity.ok(null);
 	}
 
 	// 회원수정

@@ -4,39 +4,76 @@
     <head>
         <meta charset="UTF-8" />
         <title>Insert title here</title>
+        <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+            crossorigin="anonymous"
+        />
+        <script
+            src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+            crossorigin="anonymous"
+        ></script>
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
         <!-- axios 사용하기 위한 스크립트... -->
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
-        <h1>회원가입</h1>
-
-        <div class="form-el">
+        <!-- <div class="form-el">
             아이디 : <input type="text" name="username" id="username" placeholder="아이디를 입력해 주세요" required />
             <button id="idCheckBtn" onclick="checkId()">중복체크</button>
-        </div>
+        </div> -->
 
-        <div class="form-el">
+        <!-- <div class="form-el">
             비밀번호 :
             <input type="text" name="password" id="password" placeholder="비밀번호를 입력해 주세요" required />
-        </div>
+        </div> -->
 
-        <div class="form-el">
+        <!-- <div class="form-el">
             닉네임 : <input type="text" name="nickname" id="nickname" placeholder="닉네임을 입력해 주세요" required />
             <button id="nickCheckBtn" onclick="checkNick()">중복체크</button>
-        </div>
+        </div> -->
 
-        <div class="form-el">
+        <!-- <div class="form-el">
             이메일 : <input type="text" name="email" id="email" placeholder="이메일을 입력해 주세요" required />
-        </div>
+        </div> -->
 
-        <div class="form-el">
+        <!-- <div class="form-el">
             전화번호 : <input type="text" name="phone" id="phone" placeholder="전화 번호를 입력해 주세요" required />
+        </div> -->
+
+        <div id="register-form">
+            <h1>회원가입</h1>
+
+            <div id="register-submit">
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="username" placeholder="name@example.com" />
+                    <label for="floatingInput">아이디를 입력해 주세요</label>
+                    <button id="nickCheckBtn" class="btn btn-secondary" onclick="checkId()">중복체크</button>
+                </div>
+
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="password" placeholder="Password" />
+                    <label for="floatingPassword">비밀번호를 입력해 주세요</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="nickname" placeholder="name@example.com" />
+                    <button id="nickCheckBtn" class="btn btn-secondary" onclick="checkNick()">중복체크</button>
+                    <label for="floatingInput">닉네임을 입력해 주세요</label>
+                </div>
+                <div class="form-floating mb-3">
+                    <input type="text" class="form-control" id="email" placeholder="name@example.com" />
+                    <label for="floatingInput">이메일을 입력해 주세요</label>
+                </div>
+
+                <div class="form-floating mb-3" id="floating-3">
+                    <input type="text" class="form-control" id="phone" placeholder="name@example.com" />
+                    <label for="floatingInput">전화번호를 입력해 주세요</label>
+                    <button id="registerBtn" onclick="register()" class="btn btn-secondary">가입</button>
+                </div>
+            </div>
         </div>
-
-        <br />
-
-        <button id="registerBtn" onclick="register()">가입</button>
 
         <script>
             let isUserId = false;
@@ -45,7 +82,9 @@
             $(document).ready(function () {
                 // 현재 URL이 /member/register/admin인 경우에만 registerAdmin 버튼을 추가
                 if (window.location.pathname === "/member/register/admin") {
-                    $("body").append('<button id="registerAdminBtn" onclick="registerAdmin()">관리자 가입</button>');
+                    $("#floating-3").append(
+                        '<button id="registerAdminBtn" onclick="registerAdmin()" class="btn btn-secondary">관리자 가입</button>'
+                    );
                     $("#registerBtn").hide();
                 }
             });
@@ -194,9 +233,41 @@
             };
         </script>
         <style>
-            .warning-message {
-                display: none;
-                color: red;
+            body {
+                background-color: white;
+            }
+            h1 {
+                text-align: center;
+                padding-top: 5%;
+                padding-bottom: 5%;
+                color: lightslategray;
+            }
+
+            #register-form {
+                background-color: antiquewhite;
+                margin: 0 auto;
+                margin-top: 5%;
+                width: 50%;
+                border-radius: 5px;
+            }
+            #register-submit {
+                margin: 0 auto;
+                width: 50%;
+            }
+
+            #registerBtn,
+            #registerAdminBtn {
+                margin-bottom: 5%;
+            }
+
+            .form-floating {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .form-floating button {
+                margin-top: 10px;
             }
         </style>
     </body>
