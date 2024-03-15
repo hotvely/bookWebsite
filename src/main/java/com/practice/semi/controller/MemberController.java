@@ -53,29 +53,27 @@ public class MemberController {
 	        return mv;
 	    }
 	 
-//	 // 관리자
-//	 @GetMapping("/login/admin")
-//	 public ModelAndView loginAdminView() {
-//		 log.info("관리자 로그인 페이지 들어옴");
-//		 ModelAndView mv = new ModelAndView();
-//		 mv.setViewName("/member/loginView");
-//		 mv.addObject("admin", true);
-//		 return mv;
-//	 }
-	 
-		@GetMapping("/test")
-		public ModelAndView test() {
-			log.info("붙스트랩....");
-			ModelAndView mv = new ModelAndView();
-			mv.setViewName("/member/test");
-			return mv;
-		}
-
 	@GetMapping("/login")
 	public ModelAndView loginView() {
 		log.info("dma....");
 		ModelAndView mv = new ModelAndView();
 		mv.setViewName("/member/loginView");
+		return mv;
+	}
+	
+	@GetMapping("/myPage")
+	public ModelAndView myPageView() {
+		ModelAndView mv = new ModelAndView();
+		mv.setViewName("/member/myPageView");
+		return mv;
+	}
+	
+	@GetMapping("/myCart")
+	public ModelAndView myCartView() {
+		ModelAndView mv = new ModelAndView();
+		
+		mv.setViewName("/member/myCartView");
+		
 		return mv;
 	}
 
@@ -106,21 +104,7 @@ public class MemberController {
 		return false;
 	}
 
-	@GetMapping("/myPage")
-	public ModelAndView myPageView() {
-		ModelAndView mv = new ModelAndView();
-		mv.setViewName("/member/myPageView");
-		return mv;
-	}
-	
-	@GetMapping("/myCart")
-	public ModelAndView myCartView() {
-		ModelAndView mv = new ModelAndView();
-		
-		mv.setViewName("/member/myCartView");
-		
-		return mv;
-	}
+
 
 	// --------------------- page view
 

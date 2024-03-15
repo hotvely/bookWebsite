@@ -22,40 +22,25 @@ pageEncoding="UTF-8"%>
             <div class="form-el">
                 <ul class="list-group list-group-horizontal">
                     <li class="list-group-item">아이디 :</li>
-                    <li class="list-group-item"><div name="username" id="username">${member.id}</div></li>
+                    <li class="list-group-item"><div name="m-username" id="m-username">${member.id}</div></li>
                 </ul>
 
                 <ul class="list-group list-group-horizontal">
                     <li class="list-group-item">이메일 :</li>
-                    <li class="list-group-item"><div name="email" id="email">${member.email}</div></li>
+                    <li class="list-group-item"><div name="m-email" id="m-email">${member.email}</div></li>
                 </ul>
 
                 <ul class="list-group list-group-horizontal">
                     <li class="list-group-item">전화번호 :</li>
-                    <li class="list-group-item"><div name="phone" id="phone">${member.phone}</div></li>
+                    <li class="list-group-item"><div name="m-phone" id="m-phone">${member.phone}</div></li>
                 </ul>
 
                 <ul class="list-group list-group-horizontal">
                     <li class="list-group-item">닉네임 :</li>
-                    <li class="list-group-item"><div name="nickname" id="nickname">${member.nickname}</div></li>
+                    <li class="list-group-item"><div name="m-nickname" id="m-nickname">${member.nickname}</div></li>
                 </ul>
-
-                <!-- <div class="form-el">
-                <div name="username" id="username">아이디 : ${member.id}</div>
-            </div> -->
-                <!-- <div class="form-el">
-                <div name="email" id="email">이메일 : ${member.email}</div>
             </div>
-
-            <div class="form-el">
-                <div name="phone" id="phone">전화번호 : ${member.phone}</div>
-            </div>
-
-            <div class="form-el">
-                <div name="nickname" id="nickname">닉네임 : ${member.nickname}</div>
-            </div> -->
-            </div>
-            <button id="btn-open-modal" class="btn btn-secondary" style="margin-top: 20px">정보 수정 모달</button>
+            <button id="btn-open-modal" class="btn btn-secondary" style="margin-top: 20px">회원정보 수정</button>
         </div>
 
         <div id="updateModal">
@@ -144,12 +129,21 @@ pageEncoding="UTF-8"%>
             btnOpenModal.addEventListener("click", () => {
                 modal.style.display = "flex";
             });
+
             window.addEventListener("click", (event) => {
                 if (event.target === modal) {
-                    modal.style.display = "none";
-                    // document.getElementById("modal_body").innerHTML = "";
+                    closeModal();
                 }
             });
+
+            function closeModal() {
+                // input text 요소의 값을 비움
+                document.getElementById("password").value = "";
+                document.getElementById("email").value = "";
+                document.getElementById("phone").value = "";
+                document.getElementById("nickname").value = "";
+                modal.style.display = "none";
+            }
         </script>
 
         <style>

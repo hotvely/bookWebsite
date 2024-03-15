@@ -15,10 +15,14 @@
     <body>
         <%@ include file="/WEB-INF/views/header.jsp"%>
 
-        <h2>장바구니 페이지 입니다</h2>
+        <h3>
+            내 장바구니
+            <button id="clear-cart" class="btn btn-danger" onclick="deleteAllCart()">장바구니 비우기</button>
+        </h3>
 
-        <button onclick="deleteAllCart()">장바구니 비우기</button>
-        <div id="cartList"></div>
+        <div id="cartList">
+            <div id="cartItems"></div>
+        </div>
 
         <script>
             // 특정 쿠키 삭제
@@ -49,27 +53,33 @@
             const myCart = () => {
                 const cartInfo = JSON.parse(getCookie("cart"));
                 console.log(cartInfo);
-                const cartElement = $("#cartList");
+                // const cartElement = $("#cartList");
+                const cartElement = $("#cartItems");
 
                 if (cartInfo != null && cartInfo.length > 0) {
                     for (const item of cartInfo) {
                         // code로 쿠키찾아서 삭제
-                        const deleteButton = `<button onclick="deleteCartBook(\${item.code})">책 삭제</button>`;
+                        const deleteButton = `<button class="btn btn-secondary" style="margin-top : 15px" onclick="deleteCartBook(\${item.code}) ">책 삭제</button>`;
 
                         const totalPrice = item.count * item.price;
+
                         const itemHtml =
+                            `<div id="cartItem">` +
                             `<img width="100px" alt="xxx" src="${
                                 item.image != null ? item.image : "/images/basic.jpeg"
                             }"/>` +
-                            `<br/>` +
-                            ` <a href="/book/detail?code=\${item.code}">책 제목: \${item.title}</a>` +
-                            `<span> \${deleteButton}</span>` +
-                            `<br/>` +
-                            `<div>글쓴이: \${item.authority}</div>` +
-                            `<div id=ip_\${item.code}>가격: \${totalPrice}</div>` +
-                            `<div>수량: <button onclick="updateCart('\${item.code}','minus')">-</button>` +
+                            ` <a href="/book/detail?code=\${item.code}"> 제목: \${item.title}</a>` +
+                            `<br> \${deleteButton}</br>` +
+                            `<div id="writer">` +
+                            `<div>글쓴이 : \${item.authority}</div>` +
+                            `</div>` +
+                            `<div id="price">` +
+                            `<div id=ip_\${item.code}>가격 : \${totalPrice}</div>` +
+                            `</div>` +
+                            `<div id="amount">수량<button id="minus" class="btn btn-primary" onclick="updateCart('\${item.code}','minus')">-</button>` +
                             `<span id="quantity_\${item.code}">\${item.count}</span>` +
-                            `<button onclick="updateCart('\${item.code}','plus')">+</button></div>`;
+                            `<button id="plus" class="btn btn-primary" onclick="updateCart('\${item.code}','plus')">+</button></div>`;
+                        +`<div>`;
                         cartElement.append(itemHtml);
                     }
                 } else {
@@ -111,5 +121,57 @@
                 }
             };
         </script>
+        <style>
+            #cartList > div {
+                display: flex;
+                flex-wrap: wrap;
+                align-items: center;
+                /* flex: 1; */
+                margin: 10px;
+                padding: 10px;
+            }
+            #cartItem {
+                flex: 1;
+                min-width: 250px;
+                max-width: 300px;
+                margin: 10px;
+                padding: 10px;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+            }
+
+            #quantity_ {
+                font-size: large;
+            }
+            #minus {
+                margin-right: 10px;
+                margin-left: 10px;
+            }
+            #plus {
+                margin-left: 10px;
+            }
+
+            h3 {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+            #clear-cart {
+                margin-top: 10px;
+            }
+
+            #writer,
+            #price,
+            #amount {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                border: 1px solid #ccc;
+                font-size: large;
+                width: 100%;
+                margin-right: 10px;
+                margin-top: 15px;
+            }
+        </style>
     </body>
 </html>
