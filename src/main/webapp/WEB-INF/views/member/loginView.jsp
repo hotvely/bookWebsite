@@ -31,14 +31,6 @@
             </div>
         </div>
         <script>
-            // $(document).ready(function () {
-            //     // 현재 URL이 /member/login/admin인 경우에만 loginAdmin 버튼을 추가
-            //     if (window.location.pathname === "/member/login/admin") {
-            //         $("body").append('<button id="registerAdminBtn" onclick="adminLogin()">관리자 로그인</button>');
-            //         $("#loginBtn").hide();
-            //     }
-            // });
-
             const login = async () => {
                 let member = new URLSearchParams();
                 member.append("username", $("#username").val());
@@ -56,28 +48,6 @@
                     alert("로그인 실패");
                 }
             };
-
-            // const login = async () => {
-            //     let member = new URLSearchParams();
-            //     member.append("username", $("#username").val());
-            //     member.append("password", $("#password").val());
-            //     const response = await axios.post("/member/login", member);
-            //     if (response) {
-            //         window.location = "/";
-            //     }
-            // };
-
-            // const adminLogin = async () => {
-            //     let member = new URLSearchParams();
-            //     member.append("username", $("#username").val());
-            //     member.append("password", $("#password").val());
-            //     member.append("admin", "Y");
-            //     const response = await axios.post("/member/login/admin", member);
-            //     if (response) {
-            //         alert("관리자 로그인");
-            //         window.location = "/";
-            //     }
-            // };
         </script>
 
         <style>

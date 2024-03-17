@@ -87,6 +87,7 @@
                 }
             };
             myCart();
+
             const updateCart = (code, action) => {
                 const cartData = JSON.parse(getCookie("cart"));
                 console.log(cartData);

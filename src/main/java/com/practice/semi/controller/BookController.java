@@ -158,7 +158,7 @@ public class BookController {
 			@RequestParam(name = "date", required = false) String date,
 			@RequestParam(name = "image", required = false) String image) {
 
-//		log.info("" + date);
+		log.info("" + date);
 		if (subcategory == null)
 			subcategory = 0;
 
@@ -183,6 +183,7 @@ public class BookController {
 			@RequestParam(name = "price") int price, @RequestParam(name = "publisher") String publisher,
 			@RequestParam(name = "date", required = false) String date,
 			@RequestParam(name = "image", required = false) String image) {
+		log.info("책수정");
 		boolean isSucc = false;
 
 		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -197,7 +198,7 @@ public class BookController {
 		if (uBook != null) {
 			isSucc = true;
 		}
-
+		log.info("책 수정 "+uBook);
 		return ResponseEntity.ok(isSucc);
 	}
 

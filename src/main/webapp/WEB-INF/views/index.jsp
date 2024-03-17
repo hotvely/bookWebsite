@@ -7,7 +7,7 @@
         <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
     </head>
     <body>
-        <%@ include file="/WEB-INF/views/header.jsp"%> 이 줄 부터는 메인 페이지 입니다..
+        <%@ include file="/WEB-INF/views/header.jsp"%>
 
         <script>
 
@@ -22,7 +22,7 @@
 
                     			const startPage = (Math.floor((${currPage} - 1) / 5) * 5) + 1;
                     			if(data.hasPrev && startPage > 5)
-                    				$('#page').append('<a href="/?pageNum='+(startPage-5)+ '"><button><</button></a>');
+                    				$('#page').append('<a href="/?pageNum='+(startPage-5)+ '"><button class="btn btn-secondary"><</button></a>');
 
                     			// 실제 페이지들 나열 할 곳..
                     			let endPage = startPage + 5;
@@ -32,15 +32,15 @@
 
                     			console.log("endPage", endPage);
                     			for(let idx = startPage ; idx < endPage; idx++){
-                    				$('#page').append('<a href="/?pageNum=' + (idx) + '"><button>' + (idx)+ '</button></a>');
+                    				$('#page').append('<a href="/?pageNum=' + (idx) + '"><button class="btn btn-secondary">' + (idx)+ '</button></a>');
                     			}
 
                     			if(startPage == data.totalPages || data.totalPages <= 5)
-                    				$('#page').append('<a href="/?pageNum=' + endPage + '"><button>' +endPage + '</button></a>');
+                    				$('#page').append('<a href="/?pageNum=' + endPage + '"><button class="btn btn-secondary">' +endPage + '</button></a>');
 
                     			console.log("startPage + 5 ",startPage + 5);
                     			if(data.hasNext && endPage - startPage >= 4)
-                    				$('#page').append('<a href="/?pageNum=' + (startPage+5) + '"><button>></button></a>');
+                    				$('#page').append('<a href="/?pageNum=' + (startPage+5) + '"><button class="btn btn-secondary">></button></a>');
 
                     			 let HTML = '';
 
@@ -71,8 +71,8 @@
 
             // if (member != null && member.admin == "Y") {
             //                         $("#addBooks").show();
-            //                         // } else if (member == null) {
-            //                         //     $("#addBooks").hide();
+            //                         } else if (member == null) {
+            //                             $("#addBooks").hide();
             //                     } else {
             //                         $("#addBooks").hide();
             //                     }
@@ -88,13 +88,36 @@
                 color: gray;
                 text-decoration: none;
             }
+            #addBooks {
+                position: absolute;
+                top: 10px;
+                right: 10px;
+            }
+            #page {
+                text-align: center;
+                margin-bottom: 15px;
+            }
+            a {
+                margin-right: 10px;
+                color: gray;
+                text-decoration: none;
+            }
         </style>
-
-        <div id="addBooks">
-            <a href="/book/create">
-                <button>책추가</button>
-            </a>
-        </div>
+        <div id="addBooks"></div>
+        <script>
+            console.log(member);
+            const id = `${member.id}`;
+            console.log(id);
+            // console.log(${member});
+            if (`${member}` != "" && `${member.admin}` == "Y") {
+                const str = `<a href="/book/create">
+                        <button style="margin-left: 50px" class="btn btn-secondary">
+                            책추가
+                        </button>
+                    </a>`;
+                $("#addBooks").append(str);
+            }
+        </script>
 
         <table id="bookList">
             <tr>

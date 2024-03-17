@@ -2,6 +2,7 @@
 <!DOCTYPE html>
 <html>
     <head>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
         <meta charset="UTF-8" />
         <title>Insert title here</title>
     </head>

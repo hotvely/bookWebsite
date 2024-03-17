@@ -21,7 +21,7 @@
             let member = null;
 
             if ({ member } != null) member = { member }.member;
-
+            console.log({ member });
             const getMember = async () => {
                 try {
                     const response = await axios.post("/header");
@@ -34,10 +34,6 @@
                                 "<br/>" +
                                 '<button class="nav-link active" aria-current="page" onclick="logout()">로그아웃</button>'
                         );
-                        // if (member == null) {
-                        //     $("#addBooks").hide();
-                        // }
-
                         // 일반 유저면 책 추가 버튼 숨김
                         if (member != null && member.admin == "Y") {
                             $("#addBooks").show();

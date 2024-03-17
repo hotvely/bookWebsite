@@ -20,29 +20,6 @@
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     </head>
     <body>
-        <!-- <div class="form-el">
-            아이디 : <input type="text" name="username" id="username" placeholder="아이디를 입력해 주세요" required />
-            <button id="idCheckBtn" onclick="checkId()">중복체크</button>
-        </div> -->
-
-        <!-- <div class="form-el">
-            비밀번호 :
-            <input type="text" name="password" id="password" placeholder="비밀번호를 입력해 주세요" required />
-        </div> -->
-
-        <!-- <div class="form-el">
-            닉네임 : <input type="text" name="nickname" id="nickname" placeholder="닉네임을 입력해 주세요" required />
-            <button id="nickCheckBtn" onclick="checkNick()">중복체크</button>
-        </div> -->
-
-        <!-- <div class="form-el">
-            이메일 : <input type="text" name="email" id="email" placeholder="이메일을 입력해 주세요" required />
-        </div> -->
-
-        <!-- <div class="form-el">
-            전화번호 : <input type="text" name="phone" id="phone" placeholder="전화 번호를 입력해 주세요" required />
-        </div> -->
-
         <div id="register-form">
             <h1>회원가입</h1>
 

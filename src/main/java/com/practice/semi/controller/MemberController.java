@@ -91,7 +91,7 @@ public class MemberController {
 		}
 	}
 
-	// 로그아웃 button 태그로 ajax 통신 post 요청 후 반환 받고 클라이언트에서 처리하는 로그아웃 방식
+	// 로그아웃 button 태그로 서버에 post 요청 후 반환 받고 클라이언트에서 처리하는 로그아웃 방식
 	@PostMapping("/logout")
 	public boolean logout(HttpServletRequest request) {
 		log.info("logout");
